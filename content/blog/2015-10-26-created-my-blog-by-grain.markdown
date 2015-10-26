@@ -60,6 +60,7 @@ $ ./grainw create-post 'Any blog post title'
 ```
 すると、
 「./content/blog/yyyy-mm-dd-上で指定したタイトル.markdown」
+
 というfileが出来ます。それを編集します。
 
 5. Github Pagesにデプロイするには、
