@@ -72,10 +72,10 @@ deploy = github_pages_deploy_cmd
  */
 
 // General settings.
-title = 'Octopress theme for Grain' // blog name for the header, title and RSS feed
-subtitle = 'Grain is a static web site building framework for Groovy' // blog brief description for the header
-author = 'SysGears'                 // author name for Copyright, Metadata and RSS feed
-meta_description = ''               // blog description for Metadata
+title = 'u-ryo\'s blog' // blog name for the header, title and RSS feed
+subtitle = 'various writings for introducing myself...' // blog brief description for the header
+author = 'u-ryo'                 // author name for Copyright, Metadata and RSS feed
+meta_description = 'ICT, Java, Web, etc.'               // blog description for Metadata
 
 // Blog and Archive.
 posts_per_blog_page = 5             // the number of posts to display per blog page
@@ -157,7 +157,7 @@ asides {
 
     // GitHub repositories.
     github {
-        user = 'sysgears'           // GitHub (https://github.com/) username
+        user = 'u-ryo'           // GitHub (https://github.com/) username
         show_profile_link = true    // whether to show link to GitHub profile
         skip_forks = true
         count = 10                  // the number of repositories to show
@@ -165,7 +165,7 @@ asides {
 
     // The latest tweets.
     tweets {
-        user = 'sysgears'           // Twitter (https://twitter.com/) username
+        user = ''           // Twitter (https://twitter.com/) username
         count = 2                   // the number of tweets to display
         //consumer_key = ''         // to get consumer key and secret go to https://dev.twitter.com/apps and create a new application
         //consumer_secret = ''
@@ -181,20 +181,20 @@ asides {
 
     // Links to social networks:
     google_plus {
-        user = '109746189379932479469' // Google plus (https://plus.google.com/) user id
+        user = '' // Google plus (https://plus.google.com/) user id
     }
     twitter {
-        user = 'sysgears'           // Twitter (https://twitter.com/) username
+        user = ''           // Twitter (https://twitter.com/) username
     }
     facebook {
-        user = 'sysgears'           // Facebook (https://www.facebook.com/) username
+        user = ''           // Facebook (https://www.facebook.com/) username
     }
     instagram {
         user = ''                   // Instagram (http://instagram.com/) username
     }
 
     // Blog owner description.
-    about_author = 'A brief description of blog owner.'
+    about_author = 'A Java programmer in Tokyo.'
 }
 
 commands = [
