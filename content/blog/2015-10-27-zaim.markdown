@@ -5,7 +5,7 @@ date: "2015-10-27 08:54"
 author: 'u-ryo'
 categories: [android, ocr]
 comments: true
-published: false
+published: true
 ---
 最近、家計簿アプリ「[Zaim](http://zaim.net/)」がマイブームです。
 
