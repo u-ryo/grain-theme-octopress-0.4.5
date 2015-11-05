@@ -41,8 +41,10 @@ menuentry "Run Ubuntu Live ISO" {
 更にブートするには、loopbackモジュールが必要になり、
 それはunsignedなので、そこで引っ掛かりますが、
 仕組み上、signed grubでモジュールは使えない(使えてしまうとillegalなモジュールが入り込めてしまう)ので、
+
 1. loopbackモジュールを使わない
 1. loopbackモジュールを含めたgrubを自力で署名する
+
 前者はUSBメモリをHDとして直接インストールすれば良さそうですが、
 8GB以上の容量が必要になります。
 現状手元にそんな容量のUSBメモリがありません。
