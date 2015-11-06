@@ -19,4 +19,4 @@ USBメモリに直接ubuntuをインストールするために、
 ```
 $ sudo cp -rpi /usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed /etc/efi/BOOT/BOOTx64.EFI
 ```
-4. これでSecure BootなPC挿してリブート
+4. これでSecure BootなPCに挿してリブート
