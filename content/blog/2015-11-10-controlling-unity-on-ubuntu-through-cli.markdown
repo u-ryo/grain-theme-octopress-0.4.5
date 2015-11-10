@@ -21,7 +21,7 @@ $ dconf write /com/canonical/indicator/power/show-time "true"
 $ dconf write /com/canonical/indicator/power/show-percentage "true"
 ```
 
-### En on the menu bar
+### "En" on the menu bar(default language selection)
 ```
 $ dconf write /org/gnome/desktop/input-sources/current "uint32 1"
 ```
