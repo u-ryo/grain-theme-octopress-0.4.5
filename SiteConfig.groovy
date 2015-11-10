@@ -24,7 +24,7 @@ environments {
     }
     prod {
         log.info 'Production environment is used'
-        url = '' // the site URL, for instance http://example.com
+        url = 'http://u-ryo.github.io/' // the site URL, for instance http://example.com
         show_unpublished = false
         features {
             minify_xml = true
@@ -81,7 +81,7 @@ meta_description = 'ICT, Java, Web, etc.'               // blog description for 
 posts_per_blog_page = 5             // the number of posts to display per blog page
 posts_per_archive_page = 10         // the number of posts to display per archive page
 disqus {
-    short_name = ''                 // the unique identifier assigned to a Disqus (http://disqus.com/) forum
+    short_name = 'uryooo'                 // the unique identifier assigned to a Disqus (http://disqus.com/) forum
 }
 
 // RSS feed.
@@ -212,10 +212,10 @@ commands = [
 layout: post
 title: "${postTitle}"
 date: "${date.format(datetime_format)}"
-author:
+author: 'u-ryo'
 categories: []
 comments: true
-published: false
+published: true
 ---
 """)},
 'create-page': { String location, String pageTitle ->

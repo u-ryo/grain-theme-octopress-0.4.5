@@ -48,7 +48,7 @@ $ git push -u origin master
 ### PhoneGap Builder
 
 そうしておいてから、
-[PhoneGap Builder](https://build.phonegap.com)に行って、
+[PhoneGap Builder](https://build.phonegap.com)(passwordは英小文字大文字8文字以上)に行って、
 buildして、端末にはQR codeで読み込ませれば、
 install、実行が出来ます。
 
