@@ -1,0 +1,15 @@
+cd grain-theme-octopress-0.4.5/
+./grainw create-post 'some blog title'
+
+edit content/blog/YYYY-MM-DD-some-blog-title.md
+
+for preview
+./graidlew
+
+for adding blog post
+./granw gendeploy
+
+for git
+git add content/blog/*
+git commit -a
+git push
