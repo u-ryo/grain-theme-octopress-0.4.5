@@ -98,7 +98,7 @@ enable_site_search = true           // defines whether to enable site search
 subscribe_url = ''                  // url to subscribe by email (service integration required)
 
 // Google Analytics.
-google_analytics_tracking_id = ''   // google analytics tracking code, for details visit: http://www.google.com/analytics/
+google_analytics_tracking_id = 'UA-70134374-1'   // google analytics tracking code, for details visit: http://www.google.com/analytics/
 
 // Sharing.
 sharing {
