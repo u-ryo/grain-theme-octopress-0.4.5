@@ -40,6 +40,7 @@ $ heroku create my-application
 $ git init
 $ git add Gemfile Gemfile.lock Procfile app.rb
 $ git commit -a
+$ bundle install
 $ git push heroku master
 ```
 
