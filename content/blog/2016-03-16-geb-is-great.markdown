@@ -97,7 +97,7 @@ withAlert(wait: true) {
 } == 'modal dialog message'
 ```
 
-まぁ、[manual](http://www.gebish.org/manual/current/)を読めってことですね。
+まぁ、[geb manual](http://www.gebish.org/manual/current/)を読めってことですね。
 
 これはgroovyのことですが、日付のformatが簡単です。
 
