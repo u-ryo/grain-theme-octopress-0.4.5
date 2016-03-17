@@ -7,6 +7,9 @@ categories: [test, groovy, javadoc, java]
 comments: true
 published: true
 ---
+pythonには[doctest](http://docs.python.jp/2/library/doctest.html)というのがあって、
+method前段に書いた動作例documentをtestとして動かせるそうな。
+同じようなのがJavaにも無いかなと探してみると、
 `groovy.util.JavadocAssertionTestSuite`を使ってJavadocにtesting codeを書けるんだそう。
 [うさぎ組 プロダクトコードのJavaDocにテストコードを書く方法](http://kyon-mm.bitbucket.org/blog/html/2013/05/29/use_javadocassertiontestsuite.html)より。
 
@@ -44,4 +47,6 @@ class ReferenceTests extends TestCase {
 ```
 
 と書けば、gradleでもtestしてくれるそう。
-こんなのがあったなんて。
+こんなのがあったなんてびっくりポンです。
+[JDoctest](http://cscott.net/Projects/JDoctest/)というのもありますが、
+Javascriptで記述するというのでGroovyの方がいいですよね。
