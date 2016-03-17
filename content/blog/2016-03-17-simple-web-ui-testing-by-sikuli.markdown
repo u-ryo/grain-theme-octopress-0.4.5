@@ -23,3 +23,6 @@ Captchaを乗り越えるために裏でlogic組みたかったんですけど�
 あぁ、上記のSikuli-apiを使ってJava Test classとして書けば良かったんですね。
 出来ないことはないですか。ぼくが見落としただけです。
 「ここ」って示す画像を沢山用意しないとならなさそう、です。
+
+じぇじぇ、GebとSikuli、[一緒に使えそう](https://fbflex.wordpress.com/2012/10/27/geb-and-sikuli/)ですね。
+もうGebで書いちゃいましたよトホホ。
