@@ -1,0 +1,24 @@
+---
+layout: post
+title: "Awakening Wave LAN of NetworkManager on the Laptop"
+date: "2016-03-22 03:27"
+author: 'u-ryo'
+categories: [NetworkManager]
+comments: true
+published: true
+---
+HPのノートPCで、suspendから覚めても無線LANが復活しないことがよくあったので
+困ってたんですが、NetworkManagerをcommand lineからいじれると知って。
+
+```
+$ nmcli -p nm status
+```
+
+とやると現在の状態を表示し、
+やってみるとWLANのstatusがsleepだったので、
+
+```
+sudo nmcli -p nm sleep false
+```
+
+とすると、繋げに行くようになりました。めでたしめでたし。
