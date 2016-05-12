@@ -18,7 +18,7 @@ $ nmcli -p nm status
 やってみるとWLANのstatusがsleepだったので、
 
 ```
-sudo nmcli -p nm sleep false
+$ sudo nmcli -p nm sleep false
 ```
 
 とすると、繋げに行くようになりました。めでたしめでたし。

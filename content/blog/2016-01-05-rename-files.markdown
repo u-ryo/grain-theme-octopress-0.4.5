@@ -24,7 +24,7 @@ Bareword "IMG_" not allowed while "strict subs" in use at (eval 1) line 1.
 と言われて動かなかったので、
 
 ```
-find /home/u-ryo/photo/20151227/ -name "IMG_*.JPG"|sed 'p;s|IMG_\([0-9][0-9][0-9][0-9]\).JPG|img_0\1.jpg|g'|xargs -n2 mv
+find /home/u-ryo/photo/20151227/ -maxdepth 1 -name "IMG_*.JPG"|sed 'p;s|IMG_\([0-9]*\).JPG|img_0\1.jpg|g'|xargs -n2 mv -i
 ```
 
 とすれば動いた。
