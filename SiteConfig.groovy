@@ -200,7 +200,7 @@ asides {
 commands = [
 'create-post': { String postTitle ->
     def date = new Date()
-    def fileDate = date.format("yyyy-MM-dd")
+    def fileDate = date.format("yyyy-MM-dd", TimeZone.getTimeZone('JST'))
     def filename = fileDate + "-" + postTitle.encodeAsSlug() + ".markdown"
     def blogDir = new File(content_dir + "/blog/")
     if (!blogDir.exists()) {
@@ -208,7 +208,8 @@ commands = [
     }
     def file = new File(blogDir, filename)
 
-    file.exists() || file.write("""---
+    file.exists() || file.write("""\
+---
 layout: post
 title: "${postTitle}"
 date: "${date.format(datetime_format)}"
