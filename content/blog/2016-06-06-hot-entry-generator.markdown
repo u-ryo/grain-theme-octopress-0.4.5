@@ -1,4 +1,4 @@
---
+---
 layout: post
 title: "Hot Entry Generator"
 date: "2016-06-06 10:23"

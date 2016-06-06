@@ -1,4 +1,4 @@
---
+---
 layout: post
 title: "MS AI Rinna"
 date: "2016-06-06 10:34"
