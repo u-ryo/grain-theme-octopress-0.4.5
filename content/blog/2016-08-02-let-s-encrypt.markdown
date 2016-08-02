@@ -47,3 +47,9 @@ cerbot-auto renew -q --post-hook 'service apache2 reload'
 ```
 
 で良さそうです。
+
+`certbot-auto`は、実行するといきなり`apt-get update`してからpython2.7とか入れるのと幾つかのpackagesをupdateするので注意です。
+
+また、Let's Encryptにしてから[SSL Server Test](https://www.ssllabs.com/ssltest/)をかけてみると、「Incorrect SNI alerts」というのが出るようになりました。
+これは、`/etc/apache2/site-enabled/default-ssl`の`<VirtualHost _default_:443>`に`ServerName XXXXXX`とすることで解決しました。
+cf. [SSLテストで”Incorrect SNI alerts”を解決する](https://www.rootlinks.net/2016/02/09/sslテストでincorrect-SNI-alertsを解決する/)
