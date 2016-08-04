@@ -16,3 +16,14 @@ cf.[トリガーの条件式における記述方法について](http://www.zab
 ```
 ({TRIGGER.VALUE}=0&{host名:http.max(#3)}=0)|({TRIGGER.VALUE}=1&{host名:http.last(0)}=0)
 ```
+
+→何か騙された感じです。色々試すと、単に`max(#3)`だけで良さげですよ。
+
+```
+{host名:http.max(#3)}=0
+or
+{host名:http.max(#3)}=0|{host名:https.max(#3)}=0
+```
+
+↑これだけで、「3回連続してservice downを観測したらalert、
+且つ1回service upを観測したら復帰」を実現出来ました。
