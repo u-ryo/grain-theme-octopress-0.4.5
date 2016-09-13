@@ -34,10 +34,10 @@ published: true
 こちとら、apache2 serverを止めたくない状況だったので、
 
 ```
-$ sudo cerbot-auto certonly --webroot /var/www/ -m support@company.co.jp -d someserver.co.jp --agree-tos
+$ sudo cerbot-auto certonly --webroot -w /var/www/ -m support@company.co.jp -d someserver.co.jp --agree-tos
 ```
 
-(`-d`: domain, `-m`: mail address)
+(`-w`: webroot-path, `-d`: domain, `-m`: mail address)
 
 更新は、`/etc/cron.daily/certbot`を作って、
 
@@ -46,10 +46,31 @@ $ sudo cerbot-auto certonly --webroot /var/www/ -m support@company.co.jp -d some
 cerbot-auto renew -q --post-hook 'service apache2 reload'
 ```
 
-で良さそうです。
+で良さそうです。`sudo chmod a+x /etc/cron.daily/certbot`を忘れずに。
 
 `certbot-auto`は、実行するといきなり`apt-get update`してからpython2.7とか入れるのと幾つかのpackagesをupdateするので注意です。
 
 また、Let's Encryptにしてから[SSL Server Test](https://www.ssllabs.com/ssltest/)をかけてみると、「Incorrect SNI alerts」というのが出るようになりました。
 これは、`/etc/apache2/site-enabled/default-ssl`の`<VirtualHost _default_:443>`に`ServerName XXXXXX`とすることで解決しました。
 cf. [SSLテストで”Incorrect SNI alerts”を解決する](https://www.rootlinks.net/2016/02/09/sslテストでincorrect-SNI-alertsを解決する/)
+
+### command log
+
+```
+wget https://dl.eff.org/certbot-auto
+chmod a+x certbot-auto
+sudo chown root:root certbot-auto
+sudo mv -i certbot-auto /usr/local/bin/
+sudo certbot-auto certonly --webroot -w /var/lib/tomcat7/webapps/ROOT/ -m ls-support@jmtech.co.jp -d cx4.locationsupporter.info --agree-tos
+sudo vi /etc/apache2/sites-enabled/default-ssl
+================================================
+	SSLCertificateFile /etc/letsencrypt/live/cx4.locationsupporter.info/cert.pem
+	SSLCertificateKeyFile /etc/letsencrypt/live/cx4.locationsupporter.info/privkey.pem
+	SSLCertificateChainFile /etc/letsencrypt/live/cx4.locationsupporter.info/chain.pem
+================================================
+echo '#!/bin/sh' > certbot
+echo "cerbot-auto renew -q --post-hook 'service apache2 reload'" >> certbot
+chmod a+x certbot
+sudo chown root:root certbot
+sudo mv -i certbot /etc/cron.daily/
+```
