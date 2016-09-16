@@ -22,3 +22,5 @@ nip.io でも全く同じことが出来るようです。
 $ host some-project.192.168.33.176.nip.io
 some-project.192.168.33.176.nip.io has address 192.168.33.176
 ```
+
+更に更に、[sslip.io](https://sslip.io/)では正式なserver certも用意出来ちゃう、なんていう素晴らしいとこだった、ようですが、今はもうダメポです。自分でやるしかなさそうです。とはいっても、wildcard certificationはLet's Encryptでは扱ってないので、やるならお金かかっちゃいますかね...
