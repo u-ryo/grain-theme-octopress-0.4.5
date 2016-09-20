@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Lum-chan(Uruse Yatsura)"
+title: "Lum-chan(Urusei Yatsura)"
 date: "2016-07-04 01:39"
 author: 'u-ryo'
-categories: [anime, mp4, uruse-yatsura]
+categories: [anime, mp4, urusei-yatsura]
 comments: true
 published: true
 ---
