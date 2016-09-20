@@ -3,7 +3,7 @@ layout: post
 title: "Recent bookmarks"
 date: "2016-09-20 13:42"
 author: 'u-ryo'
-categories: [bookmarks, ionic, ocr, angularjs]
+categories: [bookmarks, ionic, ocr, angularjs, android]
 comments: true
 published: true
 ---
