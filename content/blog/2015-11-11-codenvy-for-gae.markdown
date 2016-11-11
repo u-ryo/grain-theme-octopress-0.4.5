@@ -13,7 +13,7 @@ published: true
 うーん、command lineが使えないので、
 JARなprojectとかうまく動かせない(buildしても成果物をどうやって取り出すのか、
 どうやってoptionつけて実行して試せるのか)感じでした。
-あと、月20時?しかtest起動、buildが出来ないみたいですね。
+あと、月20時間?しかtest起動、buildが出来ないみたいですね。
 
 [Cloud9](http://c9.io)ではGAE連携できないのかな、
 と調べてみると、GAEってgitでもdeploy出来るって?!
