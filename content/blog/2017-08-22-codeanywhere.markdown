@@ -16,4 +16,4 @@ published: true
 - `./grainw create-post '...'`の後、directory treeで`blog`を右click後Refreshしないと新しいfileが出て来ない。
 - `screen`は`apt install`すればおk。
 - ssh accessも、`id_rsa.pub`を`authorized_keys`に登録後、`ssh -p 21808 cabox@host9.codeanyhost.com`でおk。
-- `./grainw deploy`は、`~/.ssh/id_rsa.pub`をgithubに登録しておかないと失敗する。
+- `./grainw gendeploy`は、`~/.ssh/id_rsa.pub`をgithubに登録しておかないと失敗する。
