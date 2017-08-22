@@ -4,7 +4,7 @@ cd grain-theme-octopress-0.4.5/
 edit content/blog/YYYY-MM-DD-some-blog-title.md
 
 for preview
-./gradelew
+./gradlew
 
 for adding blog post
 ./grainw gendeploy
