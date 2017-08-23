@@ -73,7 +73,7 @@ deploy = github_pages_deploy_cmd
 
 // General settings.
 title = 'u-ryo\'s blog' // blog name for the header, title and RSS feed
-subtitle = 'various writings for introducing myself...' // blog brief description for the header
+subtitle = 'various information for coding...' // blog brief description for the header
 author = 'u-ryo'                 // author name for Copyright, Metadata and RSS feed
 meta_description = 'ICT, Java, Web, etc.'               // blog description for Metadata
 
