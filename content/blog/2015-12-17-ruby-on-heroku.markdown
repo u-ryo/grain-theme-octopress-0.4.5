@@ -12,7 +12,7 @@ published: true
 screen shotとかuploadするのに、何故か20kbという制限があります。
 そんなの、Gimpとかフリーソフト使えば簡単なんですが、
 入れさせてくれないんですよね。
-なので、screen shotと撮るにはALT + PrintScreen、
+なので、screen shotを撮るにはALT + PrintScreen、
 編集はMicro$oft謹製のペイント、
 pngでsave出来るようになっただけマシではありますが、
 64bit colorでしか保存できないので、
