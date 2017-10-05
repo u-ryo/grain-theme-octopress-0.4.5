@@ -98,6 +98,6 @@ You'll get `r2.bin` with the new 64bit key and version 6.
 `PRAGMA user_version` is needed because in SQLiteOpenHelper class judges whether it calls `onCreate`(table creation) by `db.getVersion()`.
 [[Android]データベースをアップグレードする時](http://d.hatena.ne.jp/isher/20091108/1257684508)
 
-そもそも画面遷移に4秒も掛かるようなAndroidアプリをリリースするなんていうのもunbilievableですが、そういう人達なので...
+そもそも画面遷移に4秒も掛かるようなAndroidアプリをリリースするなんていうのもunbelievableですが、そういう人達なので...
 
 まぁ、暗号化するにせよ自分なら[Realm](https://realm.io/)使うので、こんな知識不要ですけど、SqlCipher使うなら最初から64字16進code使うべきなんですね。

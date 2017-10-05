@@ -15,7 +15,7 @@ Caused by: java.lang.ClassNotFoundException: android.view.View$OnClickListener
 
 と言われて動かなくなりました。
 instrumentation testではなくフツーのtestですjunit4とmockitoの。
-https://stackoverflow.com/questions/14213219/java-lang-noclassdeffounderrorandroid-and-junit-test を見付けて、えーとか思いつつもやってみたら、確かに直りました。
+[java.lang.NoClassDefFoundError:android and junit test](https://stackoverflow.com/questions/14213219/java-lang-noclassdeffounderrorandroid-and-junit-test)を見付けて、えーとか思いつつもやってみたら、確かに直りました。
 
 ```
 $ rm -rf .gradle
