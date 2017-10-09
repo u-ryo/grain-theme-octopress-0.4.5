@@ -32,8 +32,8 @@ SEC1105: A PasswordCredential was required but not provided.
 GlassfishのRealmって、
 JAAS Contextを指定する必要があって、これは`.../domains/domain/config/login.conf`で規定されているんですね。
 これを見ると、
-`fileRealm`は一つなのに、
-`jdbcRealm`と`jdbcDigestRealm`ってあるぢゃないですか。
+fileについては`fileRealm`は一つなのに、
+jdbcについては`jdbcRealm`と`jdbcDigestRealm`ってあるぢゃないですか。
 をぉ、と思って、source treeを探してみると、
 `com.sun.enterprise.security.auth.login.DigestLoginModule`
 というのもあるんですね。
@@ -51,7 +51,7 @@ WEB9102: Web Login Failed: com.sun.enterprise.security.auth.login.common.LoginEx
 と言われて失敗してました。
 ...って、これ`abstract class`だから当たり前じゃないですか恥ずかしい。
 `DigestLoginModule`をextendsしてるのは`JDBCDigestLoginModule`だけだから、
-file realmで使うなら`JDBCDigestLoginModule`みたいに自前で作らないとならないんじゃないでしょうかね。
+file realmで使うなら`JDBCDigestLoginModule`みたいなのを自前で作らないとならないんじゃないでしょうかね。
 でもそうならどっかにそう書いといてよねー。
 
 結局、大人しく`jdbcDigestRealm`を使うように変更することで面倒を回避しました。
