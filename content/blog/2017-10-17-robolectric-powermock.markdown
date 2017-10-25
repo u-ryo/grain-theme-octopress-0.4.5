@@ -1,0 +1,65 @@
+---
+layout: post
+title: "Robolectric + PowerMock"
+date: "2017-10-17 18:26"
+author: 'u-ryo'
+categories: [Robolectric, PowerMock, android, test, RoboSpock, ElectricSpock, spock]
+comments: true
+published: true
+---
+[Robolectric](https://robolectric.org)のquick startは、[本家](http://robolectric.org/writing-a-test/)が詳しい。
+
+* `build.gradle`に、以下が必要(Android Studio 2系の場合)。
+```
+testCompile 'org.robolectric:robolectric:3.4.2'
+testCompile 'org.robolectric:shadows-multidex:3.3.2'
+testCompile 'org.powermock:powermock-module-junit4:1.7.3'
+testCompile 'org.powermock:powermock-module-junit4-rule:1.7.3'
+testCompile 'org.powermock:powermock-api-mockito2:1.7.3'
+testCompile 'org.powermock:powermock-reflect:1.7.3'
+testCompile 'org.powermock:powermock-classloading-xstream:1.7.3'
+```
+* Test Classは、Android Studioで開いた実class java fileの`public class CLASS名`のところで黄色いヒントをclickして`Create Test class`を選択、`JUnit4`で作成
+* 既存test classの`Whitebox`は`org.powermock.reflect.Whitebox`で置き換え
+* 既存test classの`@RunWith`の`MockitoJUnitRunner`は`org.mockito.junit.MockitoJUnitRunner`で置き換え
+* `org.mockito.exceptions.misusing.UnnecessaryStubbingException:`というwarningが出るようになったので`@RunWith(MockitoJUnitRunner.Silent.class)`にすると解消  
+cf. [How to resolve Unneccessary Stubbing exception](https://stackoverflow.com/questions/42947613/how-to-resolve-unneccessary-stubbing-exception)
+* `Robolectric`なTestは、1.`@RunWith(RobolectricTestRunner.class)` 2.`activity = Robolectric.setupActivity(SomeActivity.class);`で`Activity`を起動
+* `RuntimeException: Multi dex installation failed`と言われるので`shadows-multidex`が必要  
+cf. [Robolectric と Multidex でテストが落ちる問題の対応](https://qiita.com/kuwapp/items/942f0e44adbd45adff10)
+* static methodのmockは[PowerMock](https://github.com/powermock/powermock)と。`@RunWith`がかぶっちゃうよ、どうしよう! → [本家に解説](https://github.com/robolectric/robolectric/wiki/Using-PowerMock)あり。要は、`@PowerMockIgnore`でmockito、robolectric、android標準classesを除外、`@PrepareForTest`でstatic methodを持つclassを指定し、`@Rule`を入れ(使わないのによくわからないが必要)、`PowerMockito.mockStatic(...)`で当該classを指定
+* `NoClassDefFoundError: org/powermock/classloading/ClassloaderExecutor`と言われるので、`powermock-classloading-xstream`が必要  
+cf. [version 1.5.5 java.lang.ClassNotFoundException: org.powermock.classloading.DeepCloner #597](https://github.com/powermock/powermock/issues/597)
+* `NoClassDefFoundError: org/mockito/cglib/proxy/MethodInterceptor`と言われるので、`powermock-api-mockito2`と`2`でないとならない  
+cf. [Problem with org.mockito.plugins.MockMaker and loading MethodInterceptor #819](https://github.com/powermock/powermock/issues/819)
+* `javax.xml.parsers.FactoryConfigurationError: Provider ...DocumentBuilderFactoryImpl cannot be cast to javax.xml.parsers.DocumentBuilderFactory`と言われるので`@PowerMockIgnore`に`"javax.xml.*", "org.xml.sax.*", "org.w3c.dom.*", "org.apache.log4j.*"`が必要  
+cf. [Powermock + Mockito + Spring = DocumentBuilderFactoryImpl](https://groups.google.com/forum/#!topic/powermock/YJYPgBLpkqk)
+* `org/powermock/default.properties is found in 2 places`と言われてerrorにはならないけどwarningが出るので、`@PowerMockIgnore`に`"org.powermock.*"`も入れておく(試行錯誤の末なので参照なし)
+* `AsyncTask`があっても、特段その終了を待たずにtestが終了してしまう。`Robolectric.getBackgroundThreadScheduler().pause();`で`AsyncTask#doInBackground()`を止める必要がある(`AsyncTask#onPreExecute()`は実行される)。
+* [`ShadowAsyncTaskTest.java`](https://github.com/robolectric/robolectric/blob/master/robolectric/src/test/java/org/robolectric/shadows/ShadowAsyncTaskTest.java)を見ると、`setUp()`で`Robolectric.getBackgroundThreadScheduler().pause();`(と`Robolectric.getForegroundThreadScheduler().pause();`?)でthread止めて、`asyncTask.execute()`すると`onPreExecute()`が動き、次に`ShadowApplication.runBackgroundTasks();`すると`doInBackground()`、`ShadowLooper.runUiThreadTasks();`すると`onPostExecute()`が動く(ようだが、試してみると`ShadowApplication.runBackgroundTasks()`で返ってこなくなった。何故?!←これは単に`AsyncTask`中でdialog出して止まっていたため)
+* target class内でnewしているもののmockは、
+`PowerMockito.whennew(XXX.class).thenReturn(mock);`
+だと、
+```
+org.mockito.exceptions.base.MockitoException: 
+ClassCastException occurred while creating the mockito mock :
+...
+You might experience classloading issues, please ask the mockito mailing-list.
+```
+と言われて失敗する。
+* shadow classでもstatic methodのmockが出来る。PowerMock使わずとも良い様子。いちいちShadow class作って各method毎に`@Implements`書くのは面倒ではあるが、PowerMockを`@Rule`して並存させると上述のようにclass loaderがどうのと言われて失敗したので、Robolectric一本で頑張った方がよさ気。PowerMock使わないなら`testCompile`も`robolectric`と`shadows-multidex`の2つで済むし、PowerMock導入に伴って変更したMockito部分も変更不要になる。
+* Custom Shadow classesの追加でcustom TestRunnerは作成不要、単に`@Config`に`shadows={ShadowXXX.class}`と追記していけば良い。
+* Shadowについて。Android APIのclassesについては、全て`ShadowXXX`というclassが揃っている(e.g. `ShadowActivity`)。まるっとmockしたものを返したい場合には、custom shadow methodで`return Shadow.newInstanceOf(ShadowBluetoothDevice.class);`で良い。
+* [constructorもshadow出来る](http://robolectric.org/extending/#shadowing-constructors)。constructorの場合には単に`public void __constructor__(...){...}`でよく、`@Implementation` annotationは不要(あっても害はない)。
+* `extends`してるclassのconstructorの場合には、super classのconstructorのshadowingも必要。さもなくばsuper classの当該constructorが実行されてしまう。また、super classのconstructorもshadowingする場合、当該Shadow classの方も`extends`しないと`ClassCastException`に見舞われる。`A extends B`で`A`のconstructorをshadowingしたら`B`のconstructorもshadowingし、`ShadowA extends ShadowB`にする必要がある。
+
+
+# Robospock -> ElectricSpock or Spock for Android
+
+せめてresourceの場所なりと。
+* [RoboSpock](http://robospock.github.io/RoboSpock/)ですがちょっと更新が鈍いということで[ElectricSpock](https://github.com/hkhc/electricspock)。但し新しい分情報少なし
+* [Spock for Android](https://github.com/AndrewReitz/android-spock)もあり
+* どちらも、directory structureがstandardでないとならない様子(要するに`app/src/main/java/...`にsourceがあり`app/src/test/groovy/...`にSpock Testcodeがある)。`build.gradle`での`android.sourceSets.test.setRoot(...)`は効かないようだった
+* 要は、`buildscript.dependencies`で`classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.2.0'`を指定、`apply plugin: 'com.android.application'`と`apply plugin: 'groovyx.android'`を指定、`dependencies`に`testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'`を指定すれば素のSpock、`testCompile 'com.github.hkhc:electricspock:0.6'`ならElectricSpock、`androidTestCompile 'com.andrewreitz:spock-android:2.0'`ならSpock for Android(←これだけ`androidTestCompile`なのに注意)
+
+という感じでしょうか。
