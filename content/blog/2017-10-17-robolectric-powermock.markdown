@@ -52,6 +52,7 @@ You might experience classloading issues, please ask the mockito mailing-list.
 * Shadowについて。Android APIのclassesについては、全て`ShadowXXX`というclassが揃っている(e.g. `ShadowActivity`)。まるっとmockしたものを返したい場合には、custom shadow methodで`return Shadow.newInstanceOf(ShadowBluetoothDevice.class);`で良い。
 * [constructorもshadow出来る](http://robolectric.org/extending/#shadowing-constructors)。constructorの場合には単に`public void __constructor__(...){...}`でよく、`@Implementation` annotationは不要(あっても害はない)。
 * `extends`してるclassのconstructorの場合には、super classのconstructorのshadowingも必要。さもなくばsuper classの当該constructorが実行されてしまう。また、super classのconstructorもshadowingする場合、当該Shadow classの方も`extends`しないと`ClassCastException`に見舞われる。`A extends B`で`A`のconstructorをshadowingしたら`B`のconstructorもshadowingし、`ShadowA extends ShadowB`にする必要がある。
+* `Shadows.shadowOf(myDialog).hasBeenDissmissed()`といったようにUIの状態を取得できる。
 
 
 # Robospock -> ElectricSpock or Spock for Android
