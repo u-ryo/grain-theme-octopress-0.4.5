@@ -61,7 +61,7 @@ assertThat(shadowOf(activity).getNextStartedActivity().getAction(),
 ```
 
 
-# Robospock -> ElectricSpock or Spock for Android
+## Robospock -> ElectricSpock or Spock for Android
 
 せめてresourceの場所なりと。
 * [RoboSpock](http://robospock.github.io/RoboSpock/)ですがちょっと更新が鈍いということで[ElectricSpock](https://github.com/hkhc/electricspock)。但し新しい分情報少なし
@@ -70,3 +70,38 @@ assertThat(shadowOf(activity).getNextStartedActivity().getAction(),
 * 要は、`buildscript.dependencies`で`classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.2.0'`を指定、`apply plugin: 'com.android.application'`と`apply plugin: 'groovyx.android'`を指定、`dependencies`に`testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'`を指定すれば素のSpock、`testCompile 'com.github.hkhc:electricspock:0.6'`ならElectricSpock、`androidTestCompile 'com.andrewreitz:spock-android:2.0'`ならSpock for Android(←これだけ`androidTestCompile`なのに注意)
 
 という感じでしょうか。
+
+## Robolectric3 + RxJava(RxAndroid)1 + Retrofit2
+RxJava + Retrofitなんて鉄板だからRobolectricによるtestなんてすぐ見つかると思ってたんですが、意外に手こずりました。要は、
+* Retrofit2に対しては[MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver)([OkHttp3 の MockWebServer を使う](https://qiita.com/toastkidjp/items/4986caee5d776a4c9e6c))
+* RxJavaに対しては`RxJavaHooks`([RxJava のテスト(2): RxJavaHooks, RxAndroidPlugins](http://hydrakecat.hatenablog.jp/entry/2016/12/14/RxJava_のテスト(2)%3A_RxJavaHooks%2C_RxAndroidPlugins))
+* `MockWebServer`は、例にあるように基本`new`して`MockResponse`を`enqueue`して`url(...)`すればstartしてreturn valueにURL(`http://localhost:XXXXX/`←random port number)が入っているのでそれをRetrofitに食わせればいいのだけれども、URLをsetする部分はShadowの中なので、test classから直接食わせられず。なので固定port番号を使いたく、その場合は`server.start(portNumber);`でおk(`server.url("/...");`は不要)
+* ↑`http`になると`isCleartextTrafficPermitted()`まわりで失敗するようになった。これは、[`isCleartextTrafficPermitted()` fails on OpenJDK 8 + Robolectric #2533](https://github.com/square/okhttp/issues/2533#issuecomment-223093100)にあるように、`NetworkSecurityPolicy`をShadowしてやればよい。
+* RxJavaの`onNext`や`onCompleted`が実行されない問題は、`Robolectric.flushBackgroundThreadScheduler();`ではなく、`RxJavaHooks.setOnNewThreadScheduler(s -> Schedulers.immediate());`によって別threadじゃなくmain threadで実行するようにすればおk
+* 上記の話は、`Retrofit2`のService interfaceで`Observable<...>`を返す場合のもの。`Call<...>`を返す形にして`enqueue()`して`Callback<...>`で`onResponse()`、`onFailure()`でhandleする場合には、こうは行かなかった(`onResponse()`も`onFailure()`も実行されない)。`ShadowLooper.runUiThreadTasks()`でうまく行くようなことを書いてある情報([Testing retrofit 2 with robolectric, callbacks not being called](https://stackoverflow.com/questions/37909276/testing-retrofit-2-with-robolectric-callbacks-not-being-called))もあったが、症状変わらず。[OkHttpのMockWebServerとRobolectricでFragmentの動作をテストする](https://qiita.com/noboru_i/items/5eeb8b8d5684622aee95)にRetrofit2内で使っている`OkHttpClient.Builder#newBuilder`をshadowしてうまく行く話があったので、試すと確かに`onResponse()`が呼ばれた! ただ、今回ぼくは実classの方で`new Retrofit().newBuilder().client(new OkHttpClient().newBuilder().build())`とかって`client`methodを使っておらずdefaultで裏でimplicitlyに生成される`OkHttpClient`そのまま使っており、それだと`newBuilder()`呼ばれないので、色々辿ってった挙句、`okhttp3.Dispatcher#executorService`をshadowして、前述のpageにあったようにすぐ`command.run()`する`execute`methodを持つ`AbstractExecutorService`classを返してやると、うまく行った。`Dispatcher#executorService`って`java.util.concurrent.ThreadPoolExecutor`をdefaultでは使っており、Androidのthreadとは違うから、uncontrollableだったんですね。考えてみるに、RxAndroidと違いRetrofitはAndroid専用ではないので、`java.util.concurrent`の`Executor`使ってるのも当然ですか。
+
+## AccountManager with Robolectric(というかMockito)
+* 基本的には、`AccountManager.get(Context)`はJUnit Test内でもtarget class内でも同じobjectを返すので、そのままassertion可能
+* ただ、例えば`manager.blockingGetAuthToken(...)`でExceptionを起こさせたい時は、`AccountManager manager = spy(AccountManager.get(application));`した`manager`を`getSystemService(Context.ACCOUNT_SERVICE)`で`doReturn`するようにした`Application`を`spy`して、その`application`を`RuntimeEnvironment.application`の代わりにねじ込む必要がある([Using mockito to mock AccountManager](https://stackoverflow.com/questions/26937001/using-mockito-to-mock-accountmanager))。具体的には、
+```
+@Rule
+public ExpectedException thrown = ExpectedException.none();
+  :
+Account account = new Account("any name", CarCloudAuthUtil.ACCOUNT_TYPE);
+Application application = spy(RuntimeEnvironment.application);
+util = new CarCloudAuthUtil(application);
+AccountManager manager = spy(AccountManager.get(application));
+doReturn(manager)
+        .when(application)
+        .getSystemService(Context.ACCOUNT_SERVICE);
+manager.addAccountExplicitly(account, "any key", new Bundle());
+manager.setAuthToken(account, CarCloudAuthUtil.AUTH_TOKEN_TYPE, "any string");
+doThrow(AuthenticationException.class)
+        .when(manager)
+        .blockingGetAuthToken(eq(account), eq(CarCloudAuthUtil.AUTH_TOKEN_TYPE), eq(true));
+thrown.expect(AuthenticationException.class);
+thrown.expectMessage(new IsNull());
+```
+
+* `Exception`のassertionは、`@Test(expected=...)`でも良いが、`@Rule`でも書ける([JUnitでの例外テストの書き方](https://qiita.com/su-kun1899/items/5c9f0294a7de1986e542#ruleを使った書き方))。その場合、`Exception#message`が`null`の場合のassertionは`org.hamcrest.core.IsNull`を用いて`thrown.expectMessage(new IsNull());`とする([ExpectedException.expectMessage((String) null) is not working](https://stackoverflow.com/questions/35199026/expectedexception-expectmessagestring-null-is-not-working))。
+* mocking method実行時に他のことをしたい時には、`when(mock.methodCall()).thenAnswer(m -> {...});`とlambdaで書ける([mockitoとJMockitについてのメモ](https://qiita.com/kazurof/items/1171c7e038050453c6c9#mockitoでのサンプル))。
