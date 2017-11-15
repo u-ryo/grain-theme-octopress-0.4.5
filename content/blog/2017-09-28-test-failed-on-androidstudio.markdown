@@ -20,3 +20,6 @@ instrumentation testではなくフツーのtestですjunit4とmockitoの。
 ```
 $ rm -rf .gradle
 ```
+
+### 追記
+projectを`clean`した後、いくらbuildしても「`databinding` classが見つからない」と言われて困った時にも効きました。
