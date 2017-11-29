@@ -77,7 +77,9 @@ RxJava + Retrofitなんて鉄板だからRobolectricによるtestなんてすぐ
 
 * Retrofit2に対しては[MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver)([OkHttp3 の MockWebServer を使う](https://qiita.com/toastkidjp/items/4986caee5d776a4c9e6c))
 * RxJavaに対しては`RxJavaHooks`([RxJava のテスト(2): RxJavaHooks, RxAndroidPlugins](http://hydrakecat.hatenablog.jp/entry/2016/12/14/RxJava_のテスト(2)%3A_RxJavaHooks%2C_RxAndroidPlugins))
-* `MockWebServer`は、例にあるように基本`new`して`MockResponse`を`enqueue`して`url(...)`すればstartしてreturn valueにURL(`http://localhost:XXXXX/`←random port number)が入っているのでそれをRetrofitに食わせればいいのだけれども、URLをsetする部分はShadowの中なので、test classから直接食わせられず。なので固定port番号を使いたく、その場合は`server.start(portNumber);`でおk(`server.url("/...");`は不要)
+* `MockWebServer`は、例にあるように基本`new`して`MockResponse`を`enqueue`して`url(...)`すればstartしてreturn valueにURL(`http://localhost:XXXXX/`←random port number)が入っているのでそれをRetrofitに食わせればいいのだけれども、URLをsetする部分はShadowの中なので、test classから直接食わせられず。なので固定port番号を使いたく、その場合は、
+```server.start(portNumber);```
+でおk(`server.url("/...");`は不要)
 * ↑`http`になると`isCleartextTrafficPermitted()`まわりで失敗するようになった。これは、[`isCleartextTrafficPermitted()` fails on OpenJDK 8 + Robolectric #2533](https://github.com/square/okhttp/issues/2533#issuecomment-223093100)にあるように、`NetworkSecurityPolicy`をShadowしてやればよい。
 * RxJavaの`onNext`や`onCompleted`が実行されない問題は、`Robolectric.flushBackgroundThreadScheduler();`ではなく、
 ```RxJavaHooks.setOnNewThreadScheduler(s -> Schedulers.immediate());```
