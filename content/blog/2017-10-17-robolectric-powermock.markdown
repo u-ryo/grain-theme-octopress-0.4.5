@@ -64,6 +64,7 @@ assertThat(shadowOf(activity).getNextStartedActivity().getAction(),
 ## Robospock -> ElectricSpock or Spock for Android
 
 せめてresourceの場所なりと。
+
 * [RoboSpock](http://robospock.github.io/RoboSpock/)ですがちょっと更新が鈍いということで[ElectricSpock](https://github.com/hkhc/electricspock)。但し新しい分情報少なし
 * [Spock for Android](https://github.com/AndrewReitz/android-spock)もあり
 * どちらも、directory structureがstandardでないとならない様子(要するに`app/src/main/java/...`にsourceがあり`app/src/test/groovy/...`にSpock Testcodeがある)。`build.gradle`での`android.sourceSets.test.setRoot(...)`は効かないようだった
@@ -73,6 +74,7 @@ assertThat(shadowOf(activity).getNextStartedActivity().getAction(),
 
 ## Robolectric3 + RxJava(RxAndroid)1 + Retrofit2
 RxJava + Retrofitなんて鉄板だからRobolectricによるtestなんてすぐ見つかると思ってたんですが、意外に手こずりました。要は、
+
 * Retrofit2に対しては[MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver)([OkHttp3 の MockWebServer を使う](https://qiita.com/toastkidjp/items/4986caee5d776a4c9e6c))
 * RxJavaに対しては`RxJavaHooks`([RxJava のテスト(2): RxJavaHooks, RxAndroidPlugins](http://hydrakecat.hatenablog.jp/entry/2016/12/14/RxJava_のテスト(2)%3A_RxJavaHooks%2C_RxAndroidPlugins))
 * `MockWebServer`は、例にあるように基本`new`して`MockResponse`を`enqueue`して`url(...)`すればstartしてreturn valueにURL(`http://localhost:XXXXX/`←random port number)が入っているのでそれをRetrofitに食わせればいいのだけれども、URLをsetする部分はShadowの中なので、test classから直接食わせられず。なので固定port番号を使いたく、その場合は`server.start(portNumber);`でおk(`server.url("/...");`は不要)
