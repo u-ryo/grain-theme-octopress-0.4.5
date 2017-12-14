@@ -85,3 +85,24 @@ file realmで使うなら`JDBCDigestLoginModule`みたいなのを自前で作�
   </security-role>
 </web-app>
 ```
+
+### WEB-INF/glassfish-web.xml
+glassfishの場合は、以下のように`role-name`と`group-name`を結びつける`glassfish-web.xml`もないとダメでした。
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" 
+"http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<glassfish-web-app error-url="">
+  <security-role-mapping>
+    <role-name>user</role-name>
+    <group-name>user</group-name>
+  </security-role-mapping>
+  <class-loader delegate="true"/>
+  <jsp-config>
+    <property name="keepgenerated" value="true">
+      <description>.</description>
+    </property>
+  </jsp-config>
+</glassfish-web-app>
+```
