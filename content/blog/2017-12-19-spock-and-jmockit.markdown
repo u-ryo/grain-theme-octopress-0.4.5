@@ -78,3 +78,6 @@ GroovyでなくJavaなら`Timeout`だけで済むじゃーないですかー!
 何がいいって、[JUnit4標準の方法](https://github.com/junit-team/junit4/wiki/parameterized-tests)だとinstance fieldがparameterになるので、
 全methodについて回っちゃいませんか? というのが不安で。
 JUnitParamsなら、明示的に単一methodに対してparameter指定できるので安心です。
+
+...ダメです。JUnitParams使うと、Timeout効かないことがわかりました。
+悲しい。
