@@ -65,3 +65,16 @@ jvmarg(line:"-javaagent:${configurations.jmockit.asPath.split(':')[0]}")
 ```
 
 を入れて漸く動きました。
+
+けど、折角JMockit入れたのに、
+やっぱり別の時には`Timeout`も必要で。
+JUnit4だと`@Rule`つけて`Timeout.millis(200)`でいいんですね今。
+そしたら、JMockitで振る舞い変えなくても、
+GroovyでなくJavaなら`Timeout`だけで済むじゃーないですかー!
+うぁーん。
+
+あとはParameterized Testにしました。
+[JUnitParams](https://github.com/Pragmatists/JUnitParams)が簡便そうです。
+何がいいって、[JUnit4標準の方法](https://github.com/junit-team/junit4/wiki/parameterized-tests)だとinstance fieldがparameterになるので、
+全methodについて回っちゃいませんか? というのが不安で。
+JUnitParamsなら、明示的に単一methodに対してparameter指定できるので安心です。
