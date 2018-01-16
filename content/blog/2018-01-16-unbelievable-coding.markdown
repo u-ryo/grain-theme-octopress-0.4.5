@@ -41,17 +41,10 @@ buttonを`onTouchListener`っていうのもなんですが、
 waitしたいみたいなんですが、
 `while(true){if(!flag)break;}`ってこれじゃぁCPU無駄遣いでしょ。
 改善したっていって`do{i=0;}while(!flag);`って、あのねー...
-* 無駄な`synchronized wait()`
+* `synchronized wait()`で同期
 他Activity(dialog)に遷移させ、
-直後に`synchronized(this){wait();}`ってあるんですが、
-これ意味無いですよね。
-何かこれdeja vuがあって。
-他の箇所で`Handler`使って別threadでdialog生成、
-それのwaitに使ってたんですよね。
-んなことするなよアホかと。testしにくいし。
-それをそのまま使い回したっぽい感じです。
-仕組はどうあれ、dialog生成の後はsynchronized waitが
-必要なんだって刷り込まれてる感じがします。
+その同期に`synchronized(this){wait();}`って使ってます。
+そういうthread jaglingはやめて欲しい、です。
 
 ...というように。
 こういうcodeと共に仕事するのは、嫌で嫌で仕方ありません。
