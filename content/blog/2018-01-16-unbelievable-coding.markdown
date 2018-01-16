@@ -45,6 +45,13 @@ waitしたいみたいなんですが、
 他Activity(dialog)に遷移させ、
 その同期に`synchronized(this){wait();}`って使ってます。
 そういうthread jugglingはやめて欲しい、です。
+こういうのってホントはRXですよね。
+* method/field名が大文字で始まっててclass名と区別がつかない、
+なんていうのは可愛い方で、もう気にもならなくなってますそういえば。
+methodも長いし条件分岐も複雑で、
+state patternとかなんて知らないんだろうなぁと。
+* というか全てがfat ActionでFragmentもなければApplicationもないという
+(基本的には。後から「訳も分からずダーッとコピペした部分」にはありますが)。
 
 ...というように。
 こういうcodeと共に仕事するのは、嫌で嫌で仕方ありません。
