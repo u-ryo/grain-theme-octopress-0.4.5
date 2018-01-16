@@ -44,7 +44,7 @@ waitしたいみたいなんですが、
 * `synchronized wait()`で同期
 他Activity(dialog)に遷移させ、
 その同期に`synchronized(this){wait();}`って使ってます。
-そういうthread jaglingはやめて欲しい、です。
+そういうthread jugglingはやめて欲しい、です。
 
 ...というように。
 こういうcodeと共に仕事するのは、嫌で嫌で仕方ありません。
