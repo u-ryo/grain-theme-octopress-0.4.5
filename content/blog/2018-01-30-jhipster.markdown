@@ -47,7 +47,7 @@ version numberを最新のもの(本執筆時点では1.6.6)に書き換え、
 `@angular-devkit/core`を個別に`npm install ...`しても、
 次から次へと足りないものが出て来て、
 全部入れた挙句の果てに`yarn start`がコケるようになるのでダメ)。
-* `ng g component Foo`としてそれを表示させるにはどうしたらいいんだろう? と悩みました。route作ってそこで表示させるべく、他のentityとか見よう見真似で`foo.route.ts`作ってpath直打ちして試したものの、表示されず。errorも何も出ないので、何が悪いのか分かりません。多分登録が届いてないんだろうとは思ってたんですけど、具体的にどこをどう直せばいいのかわけわかめです。[StackOverflow](https://stackoverflow.com/questions/46587247/adding-new-route-to-jhipster-using-angular-4)に回答があったので出来ました。結局、0.`ng g component Foo`でcomponentを作る 1.`foo.route.ts`を作る(その際`Routes`で配列にするのではなく`Route`で単数に?) 2.`foo.module.ts`を作る 3.`app.module.ts`に登録(その際Angular CLIが自動登録したcomponentは削除しないとtop pageが表示されず) →そもそもcomponentではなくmoduleをgenerateするべきだったのでしょうか。よくわかりませんが、scaffoldingの後のことはなかなか書いてないので、「こんなのわかんないよー」という感じです。
+* `ng g component Foo`としてそれを表示させるにはどうしたらいいんだろう? と悩みました。route作ってそこで表示させるべく、他のentityとか見よう見真似で`foo.route.ts`作ってpath直打ちして試したものの、表示されず。errorも何も出ないので、何が悪いのか分かりません。多分登録が届いてないんだろうとは思ってたんですけど、具体的にどこをどう直せばいいのかわけわかめです。[StackOverflow](https://stackoverflow.com/questions/46587247/adding-new-route-to-jhipster-using-angular-4)に回答があったので出来ました。結局、0.`ng g component Foo`でcomponentを作る 1.`foo.route.ts`を作る(その際`Routes`で配列にするのではなく`Route`で単数に?) 2.`index.ts`を真似して作る(`foo.module`のimportは記載不要) 3.`foo.module.ts`を作る 4.`app.module.ts`に登録(その際Angular CLIが自動登録したcomponentは削除しないとtop pageが表示されず) →そもそもcomponentではなくmoduleをgenerateするべきだったのでしょうか。よくわかりませんが、scaffoldingの後のことはなかなか書いてないので、「こんなのわかんないよー」という感じです。
 
 JHipsterは「Java/Angular版Rails」か! とも思ったんですが、
 もう出てだいぶ経つみたいですし、
