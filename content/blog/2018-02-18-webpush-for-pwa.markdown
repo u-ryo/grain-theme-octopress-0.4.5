@@ -39,7 +39,7 @@ browser上からは、[Push Demo](https://gauntface.github.io/simple-push-demo/)
 1. `subscribeParams`を作って`serviceWorkerRegistration.pushManager.getSubscription(subscribeParams)`してみる。既に登録があったらunsubscribeしないとならない。上述のように、parameterではserver側のpublicKeyを`urlB64ToUint8Array()`したものと`userVisibleOnly: true`は固定値。
 1. それから`serviceWorkerRegistration.pushManager.subscribe(subscribeParams)`でsubscribeする。
 1. そうすると、endpoint、key、authが得られるので、それらをpush server側に通知。
-1. `sw.js`では、push通知が喜た場合`push` eventがfireされるので、`event.waitUntil(registration.showNotification(...)`する。この`registration`がどこから来るのかよくわからなかったが、ともあれ明示的に`waitUntil`して`showNotification`しないとならない(勝手に表示されるわけではない)。
+1. `sw.js`では、push通知が喜た場合`push` eventがfireされるので、`event.waitUntil(registration.showNotification(...)`する。この`registration`がどこから来るのかよくわからなかったが、ともあれ明示的に`waitUntil`して`showNotification`しないと表示されない(pushが来て勝手に表示されるわけではない)。
 1. 表示されたNotificationをclickすると`notificationClick` eventがfireされるので、clickしたらどこかへ遷移したい場合にはこのevent listenerを`sw.js`に書いておく必要がある。
 1. PWA用に、`sw.js`の`install` eventと`fetch` event listenerでfile chacheの作成とその利用をcodeする(`install`でcacheに加え、`fetch`ではcacheにあったらそれを、なければfetchするようにする)。
 1. notificationをpushするには、push server側でまず`new PushService(publicKey, privateKey, "http://localhost")`してから、clientから貰った情報で`push.send(new Notification(...))`する。中では色々と暗号化しているが、[nl.martijndwarsのwebpush-java](https://github.com/web-push-libs/webpush-java)を使えばVAPIDのkey生成やnotificationのsendもone methodでよろしくやってくれる。他の言語も[web-push-libs](https://github.com/web-push-libs)に各種あり。
