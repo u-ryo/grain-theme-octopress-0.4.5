@@ -42,6 +42,7 @@ browser上からは、[Push Demo](https://gauntface.github.io/simple-push-demo/)
 1. `sw.js`では、push通知が喜た場合`push` eventがfireされるので、`event.waitUntil(registration.showNotification(...)`する。この`registration`がどこから来るのかよくわからなかったが、ともあれ明示的に`waitUntil`して`showNotification`しないとならない(勝手に表示されるわけではない)。
 1. 表示されたNotificationをclickすると`notificationClick` eventがfireされるので、clickしたらどこかへ遷移したい場合にはこのevent listenerを`sw.js`に書いておく必要がある。
 1. PWA用に、`sw.js`の`install` eventと`fetch` event listenerでfile chacheの作成とその利用をcodeする(`install`でcacheに加え、`fetch`ではcacheにあったらそれを、なければfetchするようにする)。
+1. notificationをpushするには、push server側でまず`new PushService(publicKey, privateKey, "http://localhost")`してから、clientから貰った情報で`push.send(new Notification(...))`する。中では色々と暗号化しているが、[nl.martijndwarsのwebpush-java](https://github.com/web-push-libs/webpush-java)を使えばVAPIDのkey生成やnotificationのsendもone methodでよろしくやってくれる。他の言語も[web-push-libs](https://github.com/web-push-libs)に各種あり。
 
 実際に自分で真似して書いてみて、
 値やcodeを色々変えて試してみることで、
