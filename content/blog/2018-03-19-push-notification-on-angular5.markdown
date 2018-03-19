@@ -41,7 +41,7 @@ ng new application-name --service-worker
 1. `src/ngsw-config.json`を作成(雛形をコピペ)
 1. `ng build --prod`としてbuild(`ng serve`ではダメ)(base hrefを`/`の他にしたいなら`--base-href /another/directory/`が必要。←最後が`/`でないとダメ)
 
-PWAとしては、あと`manifest.json`が必要?[Progressive Web Apps using the Angular Service Worker](https://docs.google.com/document/d/1F0e0ROaZUnTFftmC0XovpREHWHjcXa4CggiFlmifjhw/edit#)
+PWAとしては、あと`manifest.json`が必要?([Progressive Web Apps using the Angular Service Worker](https://docs.google.com/document/d/1F0e0ROaZUnTFftmC0XovpREHWHjcXa4CggiFlmifjhw/edit#), [AngularアプリをPWAにする方法](https://qiita.com/studioTeaTwo/items/648731b61962b7687f5a))
 
 これで、当該projectをweb browserで表示させると、
 service workerが読み込まれ、
