@@ -21,6 +21,7 @@ published: true
 * [(Angular公式) Service Workerを始める](https://angular.jp/guide/service-worker-getting-started)
 * [AngularアプリをPWAにする方法](https://qiita.com/studioTeaTwo/items/648731b61962b7687f5a)
 * [Creating PWA with Angular 5. Part 1: Getting started with framework, creating an application, hosting it on github-pages.](https://medium.com/@nsmirnova/creating-pwa-with-angular-5-e36ea2378b5d), [Creating PWA with Angular 5. Part 2: Progressifying the application](https://medium.com/@nsmirnova/creating-pwa-with-angular-5-part-2-progressifying-the-application-449e3a706129) → [PWCat](https://github.com/NastyaSmirnova/PWCat/)を[写経して比較検討しました](https://github.com/u-ryo/PWCat/)
+* [Angular Service Worker - Step-By-Step Guide for turning your Application into a PWA](https://blog.angular-university.io/angular-service-worker/)
 
 多くの導きのおかげで、angular5にてどのようにservice workerを導入するか、
 はわかってきました。
@@ -107,6 +108,11 @@ comment付けておきました。
 `error TS2339: Property 'notification' does not exist on type 'Object | Client'`と言われて、
 どうしていいかわからず。
 生成されるべきcodeはわかってるのに、悔しい、です。
-
+折角[Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md)や[CONTRIBUTING.md](https://github.com/angular/angular/blob/master/CONTRIBUTING.md)読んでcoding ruleやcommit message formatを学んだり[CLA(Contributor License Agreement)](http://code.google.com/legal/individual-cla-v1.0.html)登録したり[DEVELOPER.md](https://github.com/angular/angular/blob/master/docs/DEVELOPER.md)読んでbuildやtestの仕方学んだりしたのにー。
+でもまぁ確かに、飛び先のURLはどこに書くべきか、とか、
+clickしたら飛ばないでただ閉じるように/閉じないようにしたい、とかするには、
+`eventListener('notificationclick',(event)=>{...});`を
+直接いじらないとならないし、
+仕様を含めたもっと別の方策が必要だと思います本当は。
 
 favicon等iconを作るのに、[Real Favicon Generator](https://realfavicongenerator.net/)、いいですね。
