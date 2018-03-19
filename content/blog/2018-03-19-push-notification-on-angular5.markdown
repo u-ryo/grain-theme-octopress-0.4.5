@@ -16,7 +16,7 @@ published: true
 ということからまた勉強が始まりました。
 調べてみると、簡単に使えるようになっているんですね(Angular CLI 1.6以降は)。
 
-* [3分クッキング ServiceWorkerで阿部寛さんを超える](https://qiita.com/studioTeaTwo/items/157e1c380ca63b372dc0) → いやこれ、単に阿部のページはcontents量が少ないから、というだけのjokeですよね
+* [3分クッキング ServiceWorkerで阿部寛さんを超える](https://qiita.com/studioTeaTwo/items/157e1c380ca63b372dc0) → いやこれ、単に阿部さんのページはcontents量が少ないから、というだけのjokeですよね
 * [Angular CLI 1.5によるAngular Service Workerクイックスタート](https://medium.com/lacolaco-blog/angular-cli-1-5%E3%81%AB%E3%82%88%E3%82%8Bangular-service-worker%E3%82%AF%E3%82%A4%E3%83%83%E3%82%AF%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88-bd90db99fe13) → 「angular.jpで公式ドキュメントの翻訳が完了しているので、こちらをご覧ください」確かに公式見た方がいいですか。
 * [(Angular公式) Service Workerを始める](https://angular.jp/guide/service-worker-getting-started)
 * [AngularアプリをPWAにする方法](https://qiita.com/studioTeaTwo/items/648731b61962b7687f5a)
