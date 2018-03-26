@@ -9,6 +9,8 @@ published: true
 ---
 外部web siteのresponseのtestに[WireMock](http://wiremock.org/)を使ったのでメモ。
 
+参考: [WireMockを使って通信に関するテストをやってみよう](https://dev.classmethod.jp/etc/wiremock-practice/)
+
 使う時は`build.gradle`で、
 
 ```
