@@ -78,3 +78,8 @@ testの時だけ`localhost:8089`を見るようにするには、
 
 AssertJ、method chainで書けるので、
 static importが`assertThat`だけで済んでいいですね。
+
+これはJHipsterの話?(Springかなぁ?)で、
+Test Class内で`@Autowired`してるservice classのmockが必要になったら、
+特に`build.grade`に記述せずとも`import org.mockito.Mock;`して
+mockitoの`@Mock`が使えるんですね。
