@@ -83,3 +83,4 @@ static importが`assertThat`だけで済んでいいですね。
 Test Class内で`@Autowired`してるservice classのmockが必要になったら、
 特に`build.grade`に記述せずとも`import org.mockito.Mock;`して
 mockitoの`@Mock`が使えるんですね。
+そう言えば、元々`import org.mockito.MockitoAnnotations;`されてますね。
