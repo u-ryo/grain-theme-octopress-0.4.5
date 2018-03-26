@@ -39,7 +39,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
                             .withBodyFile("for_test.html")));
 ```
 
-とすれば良い。
+とstatic importした
+`com.github.tomakehurst.wiremock.client.WireMock.stubFor`を使えば良い。
+matching rule詳細は[公式ページ](http://wiremock.org/docs/request-matching/)を。
 post body requestに対して`.withQueryParam("...", matching("..."))`は効かなかった。
 また、`matching`なので全体にmatchingさせる必要があることに注意。
 `find`系はなし。
@@ -48,6 +50,8 @@ test対象classでのqueryがここでの指定に合わなければ、404がthr
 
 上記のように、test用に既に用意してあるhtml fileを`.withBodyFile("...")`で指定でき、
 実体は`src/test/resources/__files/`に置く。
+`.withBodyFile(...)`は公式Docに無く、JavaDoc APIも無いので、
+[Github上のsource code](https://github.com/tomakehurst/wiremock/blob/master/src/main/java/com/github/tomakehurst/wiremock/client/MappingBuilder.java)を眺めて見つけた。
 
 こうしたmappingを`src/test/resources/mappings/`以下に`anyName.json`を置いて、
 requestとresponseを指定できるのだが、
@@ -60,6 +64,7 @@ file名alphabeticalで最後のrequest/responseしか効かず)。
 なので、Javaでstub条件書いて各test method内に書くしか無い?
 
 
+これはSpringの話だが、
 testの時だけ`localhost:8089`を見るようにするには、
 `〜.config.ApplicationProperties` classにfield定義、setter/getterのaccessorを付け、`src/main/resources/config/application.yml`の`application:`以下に通常時の値を、`src/test/resources/config/application.yml`の`application:`以下にtest時の値(この場合は`http://localhost:8089/any_path`)を記述。
 実際に使うには、
