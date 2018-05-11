@@ -21,7 +21,7 @@ Azure上のVM with GPUとか貰って試していたのですが、
 でも、分かって来るとその限界や欠点も見えてきました。
 また、課題に対する知見も溜まってきたので、忘れないうちに。
 
-* 基本的な流れは、`Read CSV(train.csv)`→`Cross Validation`(`Gradient Boosted Trees`→`Apply Model`→`Performance(Binominal Classification)`)と`Read CSV(test.csv)`を合わせて→`Apply Model`→`Select Atributes`→`Write CSV`![RapidMiner flow](rapidminer1.png) ![inside cross validation](rapidminer2.png)
+* 基本的な流れは、`Read CSV(train.csv)`→`Cross Validation`(`Gradient Boosted Trees`→`Apply Model`→`Performance(Binominal Classification)`)と`Read CSV(test.csv)`を合わせて→`Apply Model`→`Select Atributes`→`Write CSV`![RapidMiner flow](https://raw.githubusercontent.com/wiki/u-ryo/u-ryo.github.io/images/rapidminer1.png) ![inside cross validation](https://raw.githubusercontent.com/wiki/u-ryo/u-ryo.github.io/images/rapidminer2.png)
 * CSVのreadでは、まず最初の列のidを`id`、最後のyを`label`に指定、その他のattributesについては、yes/no 2値のものを`binominal`、dayを`integer`ではなく`polynominal`にするのがpointか。
 * dayとmonthから日付にしては? と思っていたのだが、pdateを見ると同じ月日でも何百日のものもあって複数yearsありそう、且つyearは特定できなさそう(365日毎でもない)
 * ならいっそday/monthをfeatureから落とすと精度が落ちる
