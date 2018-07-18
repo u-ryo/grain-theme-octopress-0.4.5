@@ -8,7 +8,8 @@ comments: true
 published: true
 ---
 今時`ListView`なんてあんまり使わないと思いますが、
-`ListView`のviewの使い回しでbugがあったのでメモ。
+`ListView`のviewの使い回しでbugがあったのでメモです。
+ぼくがやったんじゃないです。
 
 `public View getView(int position, View convertView, ViewGroup parent)`
 の`convertView`を使い回すわけですが、
@@ -32,3 +33,5 @@ objectの一部が`null`のままで次に進むと`NullPointerException`に
 まーでもこんなlevelのbugはまだいぃ方ですけどねー
 このsoftwareについては。
 色々アホなのはホントやる気無くします。
+
+参考: [Android GridViewのパフォーマンスを上げよう(1/2)](https://dev.classmethod.jp/smartphone/gridview-performanceup-1/)←そうですよね普通気を付けますよね、[ListView は Graphical Layout で作ったまま使ってはいけない](https://kokufu.blogspot.com/2012/03/listview-graphical-layout.html)←そうなんですよ最初、頭の1つだけ`null`で呼ばれた後画面に見える分だけ`not null`で呼ばれ、その後改めて`null`で呼ばれるので、何でかなーと思ったものです。ただもぅ今は`RecyclerView`だからこんなtipsはもう不要かなーと。
