@@ -1,0 +1,89 @@
+---
+layout: post
+title: "Android petite tips"
+date: "2018-07-30 18:05"
+author: 'u-ryo'
+categories: [android, java, textview]
+comments: true
+published: true
+---
+お仕事で極悪Androidアプリを改修していて、
+今日得た知見をば。
+
+### getTextSize/setTextSize
+
+あるActivityの画面で、
+本文とボタンのtext sizeを揃えようとして、
+`TextView#getTextSize`してから`setTextSize`したら、
+大きくなるんですよね。何でだろう、調べると、
+[TextView#getTextSizeとsetTextSize`のデフォルト単位が違う](http://yamato-iphone.blogspot.com/2012/02/gettextsizesettextsize.html)
+のだそう。びっくりです。
+
+```
+renewalButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, caution.getTextSize());
+```
+
+というように、単位を明示する必要があるそう。
+
+
+### サイズ自動調整TextView
+
+`TextView`で、指示通りに改行位置を固定しようと思って。
+指示中の、禁則処理に失敗しているところも含めて忠実に再現しようと。
+そのためにはtext sizeを随意にせねばならず。
+[【Android】横幅に合わせてテキストサイズを調整するTextView](https://gist.github.com/STAR-ZERO/2934490)そのままで上手く行きました。
+あーでも`onLayout()`の最初の引数`changed`が`true`の時だけ
+`resize()`すればよかとです。
+
+今は[Autosizing TextViews](https://developer.android.com/guide/topics/ui/look-and-feel/autosizing-textview)というのがあるそう。
+ただ、API 26からなのでまだなかなか使えないでしょうか。
+
+
+### onLayout後の値の取得
+
+上記のようにtext sizeを変えてから、
+その結果のtext sizeに合わせて他のViewのtext sizeを
+決定しようとすると、
+`onLayout()`が呼ばれ終わってから出ないと
+目的の値が取得出来ないんですね。
+そこで、
+[How to know when an activity finishes a layout pass?](https://stackoverflow.com/questions/8418868/how-to-know-when-an-activity-finishes-a-layout-pass)
+にあるように、
+`myView..getViewTreeObserver().addOnGlobalLayoutListener(() -> {...});`
+とすれば良いです。
+
+
+### Rx Androidにmaxはない?
+
+探したんですけど見つからなかったので自分で集計しました。
+
+```
+// テキストの最大行横幅取得(文字数だと漢字とalphabetで差異が出る)
+float textWidth = rx.Observable
+        .from(getText().toString().split("\n"))
+        .map(paint::measureText)
+        .reduce(Math::max)
+        .toBlocking()
+        .single();
+```
+
+### TextViewで白枠
+
+ある段落を白枠で囲って欲しいと言われました。
+調べると、[[android]xmlで枠を指定する](https://qiita.com/Yuki_Yamada/items/15fc68dc88b57734149b)というのがあり、
+それ用のdrawable XMLを作ってやって`android:background=...`で
+それを指定すれば、望み通りのものが得られました。
+背景色は``
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- 背景色 -->
+    <solid android:color="#00ffffff" />
+    <!-- 角の丸み -->
+    <stroke android:width="1dp"
+        android:color="@color/white" />
+    <corners android:radius="1dp" />
+</shape>
+```
