@@ -49,7 +49,7 @@ renewalButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, caution.getTextSize());
 そこで、
 [How to know when an activity finishes a layout pass?](https://stackoverflow.com/questions/8418868/how-to-know-when-an-activity-finishes-a-layout-pass)
 にあるように、
-`myView..getViewTreeObserver().addOnGlobalLayoutListener(() -> {...});`
+`myView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {...});`
 とすれば良いです。
 
 
@@ -71,9 +71,9 @@ float textWidth = rx.Observable
 
 ある段落を白枠で囲って欲しいと言われました。
 調べると、[[android]xmlで枠を指定する](https://qiita.com/Yuki_Yamada/items/15fc68dc88b57734149b)というのがあり、
-それ用のdrawable XMLを作ってやって`android:background=...`で
+それ用のdrawable XMLを作ってやって`android:background="@drawable/..."`で
 それを指定すれば、望み通りのものが得られました。
-背景色は``
+背景色は、これも書いてありますが`#00ffffff`で透明になります。
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
