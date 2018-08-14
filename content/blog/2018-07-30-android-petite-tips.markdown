@@ -103,9 +103,9 @@ float textWidth = rx.Observable
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <!-- 背景色 -->
+    <!-- background -->
     <solid android:color="#00ffffff" />
-    <!-- 角の丸み -->
+    <!-- rounded corners -->
     <stroke android:width="1dp"
         android:color="@color/white" />
     <corners android:radius="1dp" />
