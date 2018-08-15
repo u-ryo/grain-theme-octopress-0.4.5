@@ -111,3 +111,14 @@ float textWidth = rx.Observable
     <corners android:radius="1dp" />
 </shape>
 ```
+
+### Robolectricで次のActivityへの遷移の確認
+
+`shadowOf(activity).peekNextStartedActivity()`で`Intent`を取得、
+`getComponent().getClassName()`が目的のclass nameかをassert。
+
+```
+Intent intent = shadowOf(activity).peekNextStartedActivity();
+assertThat(Objects.requireNonNull(intent.getComponent()).getClassName(),
+        is(MainActivity.class.getName()));
+```
