@@ -122,3 +122,21 @@ Intent intent = shadowOf(activity).peekNextStartedActivity();
 assertThat(Objects.requireNonNull(intent.getComponent()).getClassName(),
         is(MainActivity.class.getName()));
 ```
+
+### Local PushでNotification
+
+Local PushでNotificationをして欲しい、と言われました。
+調べてみると、要するに、
+`AlarmManager`に`PendingIntent`をsetして、
+それが`set`時の引数のUnix Time(millisec)になると、
+これも`set`時引数の`BroadcastReceiver`の子classの
+`onReceive(context, intent)`が呼ばれるので、
+そこで`NotificationManager.notify()`をする、と。
+
+AndroidのNotificationについては、
+sample applicationを作って色々と試してみました。
+
+1. uninstall/端末再起動すれば登録済みのalarmは解除される
+1. 多重登録しても`PendingIntent.FLAG_UPDATE_CURRENT`なら最後のNotificationに上書きされる
+1. 過去の時日のalarmを登録するとすぐNotifyされてしまう
+1. 機種によっては挙動が違う(Huaweiでは、アプリが起動していない時/Sleep時にAlarmを発動させるには「保護されたアプリ」でないとならない、等)
