@@ -140,3 +140,4 @@ sample applicationを作って色々と試してみました。
 1. 多重登録しても`PendingIntent.FLAG_UPDATE_CURRENT`なら最後のNotificationに上書きされる
 1. 過去の時日のalarmを登録するとすぐNotifyされてしまう
 1. 機種によっては挙動が違う(Huaweiでは、アプリが起動していない時/Sleep時にAlarmを発動させるには「保護されたアプリ」でないとならない、等)
+1. 長いtextは全文出ないで端折られる。出したいなら、`.setStyle(new NotificationCompat.BigTextStyle().bigText("..."))`する。但し`.setBigContentTitle(intent.getStringExtra("..."))`も同時に加えるとダメっぽい。
