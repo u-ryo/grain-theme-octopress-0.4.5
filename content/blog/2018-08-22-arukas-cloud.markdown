@@ -9,10 +9,17 @@ published: true
 ---
 [Sakura](https://www.sakura.ad.jp/)がやっているからそのreverse spellingだという[Arukas](https://arukas.io/)、
 docker hostingをやっていて、
-credit card登録は強制されますが1 containerなら無料だというので、
+credit card登録は強制されますが1 containerなら無料というので、
 専用SSH machine作って[JHipster](https://jhipster.tech/)の開発/buildに使おうと企みました。
 無料枠では[Docker Hub](https://hub.docker.com/)にあるものしか使えないとはいえ、
-SSH machine用docker imageなんて色々あります。
+SSH serverの入ったdocker imageなんて色々あります。
+でも使ってみると、基本的にはrootでlogin、
+当然root loginをpermitしていて、
+securityを維持するにはrootのpasswordを変える、
+userを作って`.ssh/authorized_keys`を作る、
+なわけですが、けどroot loginのpermissionを切って
+sshdをrestartすると、docker終わっちゃうんですよね。
+何かもっとこう、最初からUser作って
 
 [Docker Hubを使ってGitHubにあるDockerfileからimageを自動生成する](https://simple-it-life.com/2016/03/27/dockerhub/)
 
