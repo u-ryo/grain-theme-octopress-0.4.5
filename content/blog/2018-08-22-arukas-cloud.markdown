@@ -12,8 +12,9 @@ docker hostingをやっていて、
 credit card登録は強制されますが1 containerなら無料というので、
 専用SSH machine作って[JHipster](https://jhipster.tech/)の開発/buildに使おうと企みました。
 
-cf. [arukas cloudとDockerでお手軽に開発環境をゲットする #Arukas](https://blog.stormcat.io/post/entry/arukas-development/),
-[Arukas.ioを使ってWEBページを公開する](https://qiita.com/ProjectEuropa/items/3909bd51454fcf4ef16d)
+cf. 
+* [arukas cloudとDockerでお手軽に開発環境をゲットする #Arukas](https://blog.stormcat.io/post/entry/arukas-development/)
+* [Arukas.ioを使ってWEBページを公開する](https://qiita.com/ProjectEuropa/items/3909bd51454fcf4ef16d)
 
 無料枠では[Docker Hub](https://hub.docker.com/)にあるものしか使えないとはいえ、
 SSH serverの入ったdocker imageなんて色々あります。
@@ -21,8 +22,8 @@ SSH serverの入ったdocker imageなんて色々あります。
 当然root loginをpermitしていて、
 securityを維持するにはrootのpasswordを変える、
 userを作って`.ssh/authorized_keys`を作る、
-なわけですが、けどroot loginのpermissionを切って
-sshdをrestartすると、docker終わっちゃうんですよね。
+とかなわけですが、けどroot loginのpermissionを切って
+sshdをrestartすると、docker終わっちゃうんですよね当たり前ですが。
 何かもっとこう、最初からUser作ってrootは禁止して、
 とかっていうの無いかなー、
 と物色していると、どれだったか忘れましたがgithub.comから
@@ -48,22 +49,22 @@ Arukasでは変数定義が出来るというので`Dockerfile`でGithub user名
 え、shell script内じゃないとダメ?
 じゃぁっていうんで`entrypoint.sh`作って試してみたんですけど、
 Arukasで起動に失敗しました。Docker Hubではbuild通ったのに。
-起動時のmessageとかは出ないので、何が悪いのか分かりません。
+Arukasでは起動時のmessageとかは出ないので、何が悪いのか分かりません。
 困り果ててArukasのchatで相談投げると、翌営業日にはすぐreplyをくれて、
 動作確認のためということでpull requestまで作ってくれました。
 まずは早速そのまま取り込んで起動してみたんですが、
-やはり起動に失敗しました。
-けれども、別のaccountの方でENVを編集することで再起動させてみたところ
+やはり起動に失敗。
+けれども、別のaccountの方で`ENV`を編集することで再起動させてみたところ
 うまく行ったので、何だったんでしょう?
-要するにどちらでも上手く立ち上がるようになりました。
+結局今はどちらでも上手く立ち上がるようになりました。
 ありがとうございました。
 
 他、Arukasでハマったのは、開放するPort、
-後で色々開けようと思って3000番とか8080番とか色々書いておいたら、
+後で色々service立ち上げようと思って3000番とか8080番とか色々書いておいたら、
 Endpointが有効にならないんですね。
 これもArukasのchatで聞いて教えてもらったんですが、
-確かによく読むと、Docker image立ち上がった時点で
-書いたPortが全て開いてないとEndpointが有効にならない、
+確かによく読むと、「Docker image立ち上がった時点で
+書いたPortが全て開いてないとEndpointが有効にならない」
 と書いてありますね。
 「一番上に書いたPortだけEndpointに繋がる」というのは
 「アプリ編集」画面のEndpointのinfoに書いてあるからわかったんですが。
@@ -91,7 +92,7 @@ CDNと同じくDNSを自分でcontrol出来ねばならないので、
 dynamic DNSでは使えず、custom domainは諦めました。
 
 成果物(といってもpull requestくれた山田さんのおかげモノですが。山田さんありがとうございます!):
-[uryooo/docker_alpine_sshd](https://hub.docker.com/r/uryooo/docker_alpine_sshd/builds/)
+[`uryooo/docker_alpine_sshd`](https://hub.docker.com/r/uryooo/docker_alpine_sshd/builds/)
 
 Githubにkeyを登録してあれば、Arukas AppでImageにこれ↑を指定し、
 `ENV`で`GITHUB_USER`をGithubのuser名、
