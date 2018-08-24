@@ -25,5 +25,5 @@ pip install ntfy
 
 最初よくわかってなかったのですが、
 PushBulletのアプリを入れると、
-電話帳やSMS(Short Messaging Service)もぶっこ抜いてくるんですね。
+電話帳やSMS(Short Message Service)もぶっこ抜いてくるんですね。
 それと知らずにSMS送ってしまい、相手に不審がられてしまいました。
