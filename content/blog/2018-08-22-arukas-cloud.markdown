@@ -28,7 +28,7 @@ sshdをrestartすると、docker終わっちゃうんですよね。
 と物色していると、どれだったか忘れましたがgithub.comから
 自分が登録したkeyを`ADD`してるものがあって、
 あーなるほどー、と思って。
-`ADD https://github.com/${GITHUB_USER}.keys /home/${GITHUB_USER}/.ssh/authorized_keys`ということですね。
+`ADD https://github.com/$GITHUB_USER.keys /home/$GITHUB_USER/.ssh/authorized_keys`ということですね。
 
 で、結局どうしても自分の欲しいものがなかったので、
 `Dockerfile`自作することにしました。
