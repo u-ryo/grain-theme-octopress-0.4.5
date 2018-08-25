@@ -10,8 +10,6 @@ published: true
 SwingからJavaのGUIの座を引き継いだとはいえ、
 [Java11](http://jdk.java.net/11/)ではJava本体から削除され、
 [OpenJFX](http://jdk.java.net/openjfx/)となるJavaFX、
-<!-- 何かむしろ本体に残されるAWT、Swingの方が、 -->
-<!-- スマホのソフトキーボード対応など進んでいるとか。 -->
 でもGUI作るならJavaFXだろうなぁ、
 簡単に描けるようにGroovyでないかなー、
 と思ったら、ありました[GroovyFX](http://groovyfx.org/)。
@@ -32,7 +30,8 @@ Caused by: java.lang.IllegalStateException: Toolkit not initialized
         ... 2 more
 ```
 
-色々試すと、以下のような最低限のscriptでも同じように失敗するので、
+色々試すと、以下のような最低限のscriptでもaaaを出力もせず
+全く同じerror messageを出すので、
 もうGrapeでgroovyfxを読み込んでいる時点でダメなんでしょう。
 
 ```
@@ -49,10 +48,13 @@ Grapeに拘っていたので、
 して`new javafx.embed.swing.JFXPanel()`しておけば、
 `start{...}`が動くことがわかりversion落としてやってましたが、
 今改めて試してみると、
-Grapeじゃなくて`groovy -cp groovyfx-8.0.0.jar test.groovy`とすれば
+Grapeじゃなくて`groovy -cp groovyfx-8.0.0.jar test.groovy`と
+Class Pathを指定すれば、
 `new javafx.embed.swing.JFXPanel()`もなしに
 「Hello World」もその通り動くことが確認できました。
 そっかー、Grape諦めればよかったのかー。
+`-cp`を指定しても足りないところはGrapeも効くので、
+そぃでよかったでもんそ。
 
 あと、MySQLからdata読む必要があったので、
 
@@ -70,13 +72,12 @@ sql.eachRow('SELECT * FROM table WHERE filename LIKE ?', ['%' + filename]) { r -
 とすればよいと。
 
 今回の目的は、画像を読み込んで、それにDBから読み込んだ値で四角形を描き、
-それを画像fileとして出力する、ちゅうもんじゃった。
+そぃを画像fileとして出力する、ちゅうもんじゃった。
 `scene.snapshot()`してから`SwingFXUtils.fromFXImage(scene, null)`で
 描画画像をbitmap化出来ます。
 それを`ImageIO.write()`で一発でfileに書けるがじゃっどん、
-そぃだと何か出来た画像が赤みがかっちゃってるんですよね。
-どうしたもんか、試行錯誤の挙句、
-ImageMagickのfrontend、
+そぃだと何か出来た画像が赤みがかっちゃっちょるんですよね。
+どげんしたもんか、試行錯誤の挙句、ImageMagickのfrontend、
 [im4java](http://im4java.sourceforge.net/)を通すとうまく行きました。
 
 ```
