@@ -74,6 +74,8 @@ server {
 }
 ```
 
+で、`sudo /usr/sbin/nginx -s reload`です。
+
 でも、これでGoogle APIから無事戻ってくるようにはなったものの、
 その後「No-providerで登録」になってしまい、
 まだ完成しません。
