@@ -12,7 +12,6 @@ docker hostingをやっていて、
 credit card登録は強制されますが1 containerなら無料というので、
 専用SSH machine作って[JHipster](https://jhipster.tech/)の開発/buildに使おうと企みました。
 
-cf. 
 * [arukas cloudとDockerでお手軽に開発環境をゲットする #Arukas](https://blog.stormcat.io/post/entry/arukas-development/)
 * [Arukas.ioを使ってWEBページを公開する](https://qiita.com/ProjectEuropa/items/3909bd51454fcf4ef16d)
 
@@ -91,8 +90,7 @@ custom domainも使えるとのことですが、
 CDNと同じくDNSを自分でcontrol出来ねばならないので、
 dynamic DNSでは使えず、custom domainは諦めました。
 
-成果物(といってもpull requestくれた山田さんのおかげモノですが。山田さんありがとうございます!):
-[`uryooo/docker_alpine_sshd`](https://hub.docker.com/r/uryooo/docker_alpine_sshd/builds/)
+* [docker hubの成果物](https://hub.docker.com/r/uryooo/docker_alpine_sshd/builds/)(といってもpull requestくれた山田さんのおかげモノですが。山田さんありがとうございます!)
 
 Githubにkeyを登録してあれば、Arukas AppでImageにこれ↑を指定し、
 `ENV`で`GITHUB_USER`をGithubのuser名、

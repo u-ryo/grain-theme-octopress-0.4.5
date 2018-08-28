@@ -80,3 +80,27 @@ server {
 その後「No-providerで登録」になってしまい、
 まだ完成しません。
 ただ、その問題は別のもののようで、一歩は進んだと思うので、記事にしました。
+
+↑その「No-providerで登録」になってしまうのは、
+backendで以下のようなerrorが出ていて。
+
+```
+javax.validation.ConstraintViolationException: Validation failed for classes [bz.mydns.walt.canmatch.domain.User] during persist time for groups [javax.validation.groups.Default, ]
+List of constraint violations:[
+        ConstraintViolationImpl{interpolatedMessage='must match "^[_'.@A-Za-z0-9-]*$"', propertyPath=login, rootBeanClass=class bz.mydns.walt.canmatch.domain.User, messageTemplate='{javax.validation.constraints.Pattern.message}'}
+]
+        at org.hibernate.cfg.beanvalidation.BeanValidationEventListener.validate(BeanValidationEventListener.java:140)
+        at org.hibernate.cfg.beanvalidation.BeanValidationEventListener.onPreInsert(BeanValidationEventListener.java:80)
+        at org.hibernate.action.internal.EntityIdentityInsertAction.preInsert(EntityIdentityInsertAction.java:197)
+        at org.hibernate.action.internal.EntityIdentityInsertAction.execute(EntityIdentityInsertAction.java:75)
+        at org.hibernate.engine.spi.ActionQueue.execute(ActionQueue.java:626)
+   :
+   :
+```
+
+何なんでしょうね。
+これは、account mail addressが「w.disney@somecompany.co.jp」みたいな
+「.」が入るものなんですが、それがいけないとかなのでしょうか。
+というのも、フツーの「gepetto@gmail.com」みたいなmail accountなら
+全く同じcodeで何の問題もなく入れるのです。
+「must match」の対象が何なのか、よく分かりません。
