@@ -9,7 +9,7 @@ published: true
 ---
 [JHipster](https://jhipster.tech)でService WorkerでWeb Pushを、
 と思っていて、[Angular](https://angular.io/)だから、
-[前やった]({% post_url push-notification-on-angular5 %})ように
+[前やった](https://u-ryo.github.io/blog/2018/03/19/push-notification-on-angular5/)ように
 `app.modules.ts`で`ServiceWorkerModule.register('./service-worker.js',...);`してから`@angular/service-worker`で`SwPush`をinjectして、
 って思ってたんですが、違うんですね。
 JHipsterでは[workbox](https://developers.google.com/web/tools/workbox/)でService Worker使うようになってるんですね予め。
