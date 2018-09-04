@@ -12,7 +12,7 @@ published: true
 [How Secure Is My Password?](http://howsecureismypassword.net/)、
 自分の常用passwordは1 Dayでした。
 色々試してみると、
-「長いことはいいことだ」
+「長いことはいいことだ(10文字以上はないと)」
 「最後に大文字アルファベットでも足すと劇的に良くなる」
 みたいです。
 でも多分これ、localにhashか何かがあってbrute forceを試せる、
