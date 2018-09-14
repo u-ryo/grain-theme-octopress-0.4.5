@@ -42,7 +42,7 @@ springBoot {
 にあるように、
 
 ```
-$ gradle -Pprod bootWar
+$ gradle bootRepackage -Pprod
 ```
 
 でexecutable war作れるんですね。
