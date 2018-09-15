@@ -223,6 +223,7 @@ Input type = InputTypeConvolutional(h=112,w=1,c=64), kernel = [3, 3], strides = 
 [Reading the VGG Network Paper and Implementing It From Scratch with Keras](https://hackernoon.com/learning-keras-by-implementing-vgg16-from-scratch-d036733f2d5)
 `"same"`が0と解釈された??
 いやいや、DL4Jのsourceを見ると、`"same"`はきちんと扱っているようです。
+あー、`SAME`ってこういう意味だったんですね([【Python】 KerasのConv2Dの引数paddingについて](http://ni4muraano.hatenablog.com/entry/2017/02/02/195505))。
 今回のExceptionは、具体的には
 `deeplearning4j/deeplearning4j/deeplearning4j-nn/src/main/java/org/deeplearning4j/nn/conf/layers/InputTypeUtil.java`の以下で出ていることがわかりました。
 
