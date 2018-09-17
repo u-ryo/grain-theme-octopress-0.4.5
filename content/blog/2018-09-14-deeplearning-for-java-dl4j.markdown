@@ -10,7 +10,7 @@ published: true
 会社はケチな(本気でMLやる気はない)のでマシンもGPUもなく、
 やむなく[Google Colaboratory](https://colab.research.google.com/)上で[keras](https://keras.io/ja/)でVGG16 with ImageNetをfine tuningしたmodelを、
 GPUのないNotePCでpredictしようとしました。
-NotePCには容量が小さいためpythonも本気では入れてないので、
+NotePCはDisk/Memory容量が小さいためpythonも本気では入れてないので、
 [Groovy](http://groovy-lang.org/)+[DeepLearning4J](https://deeplearning4j.org/)で何とかならないかなー、
 とあがきました。
 単純にGrapeでの指定だけだと失敗するんです。
@@ -211,16 +211,16 @@ Input type = InputTypeConvolutional(h=112,w=1,c=64), kernel = [3, 3], strides = 
 
 心が折れそうになりましたが、もう少し頑張ってみます。
 
-まずVGG16の`block2_conv1`のpadding(`padW`って恐らくこれでしょう?)は`"same"`のようです。[VGG16をkerasで実装した](http://blog.neko-ni-naritai.com/entry/2018/04/07/115504)
+まずVGG16の`block2_conv1`のpadding(`padW`って恐らくこれでしょう?)は`"same"`のようです([VGG16をkerasで実装した](http://blog.neko-ni-naritai.com/entry/2018/04/07/115504))。
 実際、途中のlogでは下のように`"padding": "same"`とあります。
 
 ```
 {"name": "block2_conv1", "config": {"kernel_regularizer": null, "activation": "relu", "dilation_rate": [1, 1], "name": "block2_conv1", "data_format": "channels_last", "kernel_size": [3, 3], "bias_constraint": null, "filters": 128, "kernel_initializer": {"config": {"scale": 1.0, "mode": "fan_avg", "distribution": "uniform", "seed": null}, "class_name": "VarianceScaling"}, "use_bias": true, "kernel_constraint": null, "activity_regularizer": null, "trainable": false, "padding": "same", ...
 ```
 
-色々見ると、VGG16では`padding=[1,1]`みたいです。[事前学習済み VGG-16 畳み込みニューラル ネットワーク](https://jp.mathworks.com/help/deeplearning/ref/vgg16.html)
-[Build VGG16 from scratch : part II](http://agnesmustar.com/2017/05/25/build-vgg16-scratch-part-ii/)
-[Reading the VGG Network Paper and Implementing It From Scratch with Keras](https://hackernoon.com/learning-keras-by-implementing-vgg16-from-scratch-d036733f2d5)
+色々見ると、VGG16では`padding=[1,1]`みたいです([事前学習済み VGG-16 畳み込みニューラル ネットワーク](https://jp.mathworks.com/help/deeplearning/ref/vgg16.html))
+([Build VGG16 from scratch : part II](http://agnesmustar.com/2017/05/25/build-vgg16-scratch-part-ii/))
+([Reading the VGG Network Paper and Implementing It From Scratch with Keras](https://hackernoon.com/learning-keras-by-implementing-vgg16-from-scratch-d036733f2d5))。
 `"same"`が0と解釈された??
 いやいや、DL4Jのsourceを見ると、`"same"`はきちんと扱っているようです。
 あー、`SAME`ってこういう意味だったんですね([【Python】 KerasのConv2Dの引数paddingについて](http://ni4muraano.hatenablog.com/entry/2017/02/02/195505))。
