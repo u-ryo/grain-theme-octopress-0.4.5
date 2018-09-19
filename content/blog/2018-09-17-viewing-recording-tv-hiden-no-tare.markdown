@@ -26,11 +26,11 @@ vlcのversionは古い(0.8.2)ので注意です。
 上記USB Boxに適合するkernel drvierのため、Debian sarge限定です。
 最後のは、朝ドラ始まる前まで安心してTVを見ていられるように、です。
 
-### instal sarge
 ついでに、いつもsargeをinstallしている手順です。
 自分用のメモです。
 
-### `/etc/rc.local`
+### /etc/rc.local
+
 ```
 #!/bin/sh
 modprobe tda7313
@@ -42,9 +42,10 @@ sleep 3
 v4lctl setinput S-Video-0
 v4lctl volume 50000
 ```
+
 kernel2.6なら`tuner.o`は出来ないので不要。
 
-### INSTALL sarge
+### INSTALL Sarge
 1. `unetbootin`でUSB作成可
 1. boot直後、`linux26`を選択
 1. cdrom mountに失敗するのでmountは手で。`mount /dev/disks/scsi/disk0/lun0/part0 /cdrom`とか何とか
@@ -85,7 +86,7 @@ alsaでないと声が割れる。
 
 
 ### for wpa_supplicant
-cf. http://near-unix.blogspot.jp/2010/09/thinkpad-535x-debian-sarge-lan_29.html
+cf. [ThinkPad 535X Debian Sarge の 無線LANのまとめ](http://near-unix.blogspot.jp/2010/09/thinkpad-535x-debian-sarge-lan_29.html)
 
 ### `/etc/default/wpasupplicant`
 
