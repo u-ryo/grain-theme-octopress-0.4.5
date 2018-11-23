@@ -287,7 +287,7 @@ import org.deeplearning4j.nn.modelimport.keras.KerasModelImport
 // model = KerasModelImport.importKerasModelAndWeights('my_model.hdf5', [224, 224, 3] as int[], false)
 model = KerasModelImport.importKerasModelAndWeights('my_model.hdf5')
 
-$ groovy -cp ~/.groovy/grapes/org.bytedeco.javacpp-presets/hdf5/jars/hdf5-1.10.2-1.4.2-linux-x86_64.jar:/home/u-ryo/.groovy/grapes/org.bytedeco.javacpp-presets/hdf5/jars/hdf5-1.10.2-1.4.2.jar:/home/u-ryo/.groovy/grapes/org.bytedeco/javacpp/jars/javacpp-1.4.2.jar dl4j.groovy
+$ groovy -cp ~/.groovy/grapes/org.bytedeco.javacpp-presets/hdf5/jars/hdf5-1.10.2-1.4.2-linux-x86_64.jar:/home/u-ryo/.groovy/grapes/org.nd4j/nd4j-native/jars/nd4j-native-1.0.0-beta2-linux-x86_64.jar:/home/u-ryo/.groovy/grapes/org.bytedeco.javacpp-presets/mkl-dnn/jars/mkl-dnn-0.15-1.4.2-linux-x86_64.jar:/home/u-ryo/.groovy/grapes/org.bytedeco.javacpp-presets/openblas/jars/openblas-0.3.2-1.4.2-linux-x86_64.jar dl4j.groovy
 ```
 
 [本家のissue](https://github.com/deeplearning4j/deeplearning4j/issues)で聞くからには、
