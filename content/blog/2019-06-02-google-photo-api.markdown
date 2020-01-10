@@ -48,6 +48,10 @@ $ ACCESS_TOKEN=`curl -s --data "refresh_token=$REFRESH_TOKEN" --data "client_id=
 ```sh
 $ curl -s -H "Authorization: Bearer $ACCESS_TOKEN" https://photoslibrary.googleapis.com/v1/albums?pageSize=50
 ```
+- 既存のAlbumの確認(`nextPageToken`がある場合)
+```sh
+$ curl -s -H "Authorization: Bearer $ACCESS_TOKEN" https://photoslibrary.googleapis.com/v1/albums?pageSize=50&pageToken=...
+```
 - 新規Albumの作成
 ```sh
 $ DIR=20190428
@@ -114,19 +118,19 @@ ALBUM_ID=`curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-t
 - `~/photo/$DIR`以下の`img_*.jpg` filesのuploadとalbum登録(約100 files毎に`ACCESS_TOKEN`のrefresh)
 
 ```sh
-for i in ~/photo/$DIR/img_*.jpg; do if [ ! ${i##*00.jpg} ];then ACCESS_TOKEN=`curl -s --data "refresh_token=$REFRESH_TOKEN" --data "client_id=$CLIENT_ID" --data "client_secret=$CLIENT_SECRET" --data "grant_type=refresh_token" https://www.googleapis.com/oauth2/v4/token|jq .access_token -r`;fi;UPLOAD_TOKEN=`FILENAME=$DIR/${i##*/}; curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H 'Content-type: application/octet-stream' -H 'X-Goog-Upload-Protocol: raw' -H "X-Goog-Upload-File-Name: $FILENAME" --data-binary "@$i" https://photoslibrary.googleapis.com/v1/uploads`;if [ $UPLOAD_TOKEN ];then curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: application/json" -d '{"albumId":"'$ALBUM_ID'","newMediaItems":[{"simpleMediaItem":{"uploadToken":"'$UPLOAD_TOKEN'"}}]}' https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate|tee -a /tmp/upload.log|grep -q error&&echo $i;else echo $i;sleep 1;fi;done|tee /tmp/upload_failed.log
+for i in ~/photo/$DIR/img_*.jpg; do if [ ! ${i##*00.jpg} ];then ACCESS_TOKEN=`curl -s --data "refresh_token=$REFRESH_TOKEN" --data "client_id=$CLIENT_ID" --data "client_secret=$CLIENT_SECRET" --data "grant_type=refresh_token" https://www.googleapis.com/oauth2/v4/token|jq .access_token -r`;fi;UPLOAD_TOKEN=`FILENAME=$DIR/${i##*/}; curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H 'Content-type: application/octet-stream' -H 'X-Goog-Upload-Protocol: raw' -H "X-Goog-Upload-File-Name: $FILENAME" --data-binary "@$i" https://photoslibrary.googleapis.com/v1/uploads`;curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: application/json" -d '{"albumId":"'$ALBUM_ID'","newMediaItems":[{"simpleMediaItem":{"uploadToken":"'$UPLOAD_TOKEN'"}}]}' https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate|tee -a /tmp/upload.log|grep -q error&&echo $i;done|tee /tmp/upload_failed.log
 ```
 
 uploadに失敗したfile namesが標準出力と`/tmp/upload_failed.log`に出てくるので、後刻それらをretry。
 
-```
+```sh
 for i in `cat /tmp/upload_failed.log`; do if [ ! ${i##*00.jpg} ];then ACCESS_TOKEN=`curl -s --data "refresh_token=$REFRESH_TOKEN" --data "client_id=$CLIENT_ID" --data "client_secret=$CLIENT_SECRET" --data "grant_type=refresh_token" https://www.googleapis.com/oauth2/v4/token|jq .access_token -r`;fi;UPLOAD_TOKEN=`FILENAME=$DIR/${i##*/}; curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H 'Content-type: application/octet-stream' -H 'X-Goog-Upload-Protocol: raw' -H "X-Goog-Upload-File-Name: $FILENAME" --data-binary "@$i" https://photoslibrary.googleapis.com/v1/uploads`;curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: application/json" -d '{"albumId":"'$ALBUM_ID'","newMediaItems":[{"simpleMediaItem":{"uploadToken":"'$UPLOAD_TOKEN'"}}]}' https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate|tee -a /tmp/upload.log|grep -q error&&echo $i;done
 ```
 
 これではbatch処理を活かしていない(複数の`UPLOAD_TOKEN`をbatchCreateしていない)のですが、Googleだけに割とすぐ終わること、error handlingがあまりにも複雑になることから、都度batchCreateすることにしました。
 
 私の場合、1000 filesで約3GB弱、を目処に分割してuploadしています。
-uploadしたfilesは全て「元のサイズ」で保存されてしまい、Google Driveの容量を消費してしまうので、[設定](https://photos.google.com/settings)から「容量を解放」しなければなりません。これが「1日1回」となっているものの、だからといって24時間後に再度実行しても「ファイルを圧縮できませんでした。ストレージを復元できるのは 1 日 1 回だけです。」と言われて出来ず、困っています。実際に再度実行できるまでには1.5日〜2日かかるようです。これが最大のneckになっています。
+uploadしたfilesは全て「元のサイズ」で保存されてしまい、Google Driveの容量を消費してしまうので、[設定](https://photos.google.com/settings)から「容量を解放」しなければなりません。これが「1日1回」となっているものの、だからといって24時間後に再度実行しても「ファイルを圧縮できませんでした。ストレージを復元できるのは 1 日 1 回だけです。」と言われて出来ず、困っています。実際に再度実行できるまでには1.5日〜2日かかるようで、これが最大のneckになっています。
 
 ## 新規Albumへの既存files追加
 これはダメでした。
@@ -155,3 +159,56 @@ $ curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: app
 ```
 なら既存のものは手でやればいいではないか?
 やってみたのですが、微妙に手元のfilesと数が合わなかったりするので、困難です。手元に3282枚あってGoogle PhotosのAlbumに3281枚あった時、どうやって差分をあぶり出したらいいのですか?! 全downloadはなしで。もう一つでは、手元に5221枚、Google Photosに5230枚と増えてます! Manuallyでは限界を感じました。
+
+## Album中の全file名取得
+自己解決しました。
+`NEXT_PAGE_TOKEN`あると面倒くさいんですけど、これで何とか。
+
+### Album探し
+最初のpageに目的のalbumがあるかをこれ↓で探す
+```sh
+curl -s -H "Authorization: Bearer $ACCESS_TOKEN" 'https://photoslibrary.googleapis.com/v1/albums?pageSize=50'|jq -r .albums[].title,.nextPageToken
+```
+なければ次のpageへ。
+```sh
+curl -s -H "Authorization: Bearer $ACCESS_TOKEN" 'https://photoslibrary.googleapis.com/v1/albums?pageSize=50&pageToken=Ck...'|jq -r .albums[].title,.nextPageToken
+```
+見付かれば、`ALBUM_ID`を同定。
+```sh
+curl -s -H "Authorization: Bearer $ACCESS_TOKEN" 'https://photoslibrary.googleapis.com/v1/albums?pageSize=50&pageToken=Ck...'|grep -1 20080318
+      "id": "ADI...",
+      "title": "20080318",
+      "productUrl": "https://photos.google.com/lr/album/ADI...",
+```
+
+そうしてから徐に、
+```sh
+ALBUM_ID=...
+NEXT_PAGE_TOKEN=`curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: application/json" -d '{"pageSize":"100","albumId":"'$ALBUM_ID'"}' https://photoslibrary.googleapis.com/v1/mediaItems:search|jq -r '.mediaItems[].filename,.nextPageToken'|tee /tmp/files.txt|tail -1`;while [ "$NEXT_PAGE_TOKEN" != null ];do NEXT_PAGE_TOKEN=`curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: application/json" -d '{"pageSize":"100","albumId":"'$ALBUM_ID'","pageToken":"'$NEXT_PAGE_TOKEN'"}' https://photoslibrary.googleapis.com/v1/mediaItems:search|jq -r '.mediaItems[].filename,.nextPageToken'|tee -a /tmp/files.txt|tail -1`;done
+```
+
+その後、
+
+```
+grep -vE -e '.{300,}' -e null /tmp/files.txt
+```
+
+で取り出せます。
+
+それで比較(`diff <(cd ~/photo;ls .../img_*) <(grep -vE -e '.{300,}' -e null /tmp/files.txt)`)したところ、足りないものはわかりました。
+ですが、何故かAPIで取ると3282個なのに
+「コンテンツ 3283個」と表示されていたり...
+よく精査すると、なるほど、Google Photosが勝手に?作った、
+[アシスタント](https://photos.google.com/assistant)にある
+`MOVIE.mp4`(ムービー)や`...-EFFECTS.jpg`(スタイルを適用した写真)、
+`...-PANO.jpg`(パノラマ)が含まれているから?
+いや、一つ(5230個と表示)はそれが原因で9個多く数が表示されていたのですが、
+もう一つ、「コンテンツ 3283個」は、APIで取得するといくら見ても
+3282個しかない、自動生成物もない、です。謎です。
+
+それと、EnrichmentとかいってTextやLocationとMapを入れられるんですけど、
+それらを取得する術がなく、Textに書いたことを検索するとかも出来ず。
+GUIから入れてみましたが、要素を追加する度にいちいち先頭に戻される、
+移動すると他の要素もどこかに行ってしまうことがある、
+等何だかなぁ、というものでした。
+Googleならこんなもんじゃないだろー!
