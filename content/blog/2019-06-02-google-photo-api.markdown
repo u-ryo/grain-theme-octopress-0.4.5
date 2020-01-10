@@ -161,19 +161,25 @@ $ curl -s -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-type: app
 やってみたのですが、微妙に手元のfilesと数が合わなかったりするので、困難です。手元に3282枚あってGoogle PhotosのAlbumに3281枚あった時、どうやって差分をあぶり出したらいいのですか?! 全downloadはなしで。もう一つでは、手元に5221枚、Google Photosに5230枚と増えてます! Manuallyでは限界を感じました。
 
 ## Album中の全file名取得
+
 自己解決しました。
 `NEXT_PAGE_TOKEN`あると面倒くさいんですけど、これで何とか。
 
 ### Album探し
+
 最初のpageに目的のalbumがあるかをこれ↓で探す
+
 ```sh
 curl -s -H "Authorization: Bearer $ACCESS_TOKEN" 'https://photoslibrary.googleapis.com/v1/albums?pageSize=50'|jq -r .albums[].title,.nextPageToken
 ```
 なければ次のpageへ。
+
 ```sh
 curl -s -H "Authorization: Bearer $ACCESS_TOKEN" 'https://photoslibrary.googleapis.com/v1/albums?pageSize=50&pageToken=Ck...'|jq -r .albums[].title,.nextPageToken
 ```
+
 見付かれば、`ALBUM_ID`を同定。
+
 ```sh
 curl -s -H "Authorization: Bearer $ACCESS_TOKEN" 'https://photoslibrary.googleapis.com/v1/albums?pageSize=50&pageToken=Ck...'|grep -1 20080318
       "id": "ADI...",
@@ -195,7 +201,7 @@ grep -vE -e '.{300,}' -e null /tmp/files.txt
 
 で取り出せます。
 
-それで比較(`diff <(cd ~/photo;ls .../img_*) <(grep -vE -e '.{300,}' -e null /tmp/files.txt)`)したところ、足りないものはわかりました。
+それで比較(`diff -y --suppress-common-lines <(cd ~/photo;ls .../img_*|sort) <(grep -vE -e '.{300,}' -e null /tmp/files.txt|sort)`)したところ、足りないものはわかりました。
 ですが、何故かAPIで取ると3282個なのに
 「コンテンツ 3283個」と表示されていたり...
 よく精査すると、なるほど、Google Photosが勝手に?作った、
