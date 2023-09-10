@@ -194,7 +194,7 @@ asides {
     }
 
     // Blog owner description.
-    about_author = 'A Java programmer in Tokyo.'
+    about_author = 'A ~~Java~~ Ruby programmer in Tokyo.'
 }
 
 commands = [
